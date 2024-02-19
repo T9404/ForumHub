@@ -1,0 +1,13 @@
+[versions]
+spring-boot = "3.2.2"
+lombok = "1.18.20"
+
+[libraries]
+spring-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+
+
+
+# This is for test
+starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
+
