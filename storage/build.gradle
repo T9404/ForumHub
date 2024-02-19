@@ -9,11 +9,26 @@ repositories {
     mavenCentral()
 }
 
+tasks.register("bootRunDev") {
+    description = "Runs the Spring Boot application with the dev profile"
+    doFirst {
+        jvmArgs = [
+                "-Dspring.profiles.active=dev"
+        ]
+    }
+    finalizedBy("bootRun")
+}
+
 
 dependencies {
     implementation libs.spring.web
     compileOnly libs.lombok
     annotationProcessor libs.lombok
+
+    implementation libs.aws.s3
+    implementation libs.jpa
+    implementation libs.flyway
+    runtimeOnly libs.postgresql
 
     testImplementation libs.starter.test
 }

@@ -1,13 +1,23 @@
 [versions]
 spring-boot = "3.2.2"
-lombok = "1.18.20"
+lombok = "1.18.30"
+mapstruct = "1.5.5.Final"
 
 [libraries]
 spring-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 
+# Database
+jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
+flyway = { module = "org.flywaydb:flyway-core", version = "8.5.13" }
+postgresql = { module = "org.postgresql:postgresql", version = "42.2.24" }
 
+# Swagger
+webmvc = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version = "2.3.0" }
+openapi = { module = "org.springdoc:springdoc-openapi-ui", version = "1.7.0" }
 
-# This is for test
+# AWS S3
+aws-s3 = { module = "org.springframework.cloud:spring-cloud-starter-aws", version = "2.2.6.RELEASE" }
+
+# Test
 starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
-
