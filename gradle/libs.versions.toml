@@ -7,6 +7,10 @@ mapstruct = "1.5.5.Final"
 spring-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 
+# Gateway
+gateway = { module = "org.springframework.cloud:spring-cloud-starter-gateway", version = "4.1.1" }
+webflux = { module = "org.springframework.boot:spring-boot-starter-webflux", version = "3.2.3" }
+
 # Database
 jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
 flyway = { module = "org.flywaydb:flyway-core", version = "8.5.13" }

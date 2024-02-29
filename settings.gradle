@@ -1,4 +1,5 @@
 rootProject.name = 'hits'
 
 include 'storage'
+include 'gateway'
 
