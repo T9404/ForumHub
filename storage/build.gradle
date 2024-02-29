@@ -1,27 +1,19 @@
 plugins {
-    id 'java'
+    alias(libs.plugins.spring)
+    alias(libs.plugins.spring.dependency.management)
 }
-
-group = 'com.example'
-version = '0.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
-tasks.register("bootRunDev") {
-    description = "Runs the Spring Boot application with the dev profile"
-    doFirst {
-        jvmArgs = [
-                "-Dspring.profiles.active=dev"
-        ]
-    }
-    finalizedBy("bootRun")
-}
-
-
 dependencies {
     implementation libs.spring.web
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+
+    testImplementation libs.starter.test
+
     compileOnly libs.lombok
     annotationProcessor libs.lombok
 
@@ -29,8 +21,6 @@ dependencies {
     implementation libs.jpa
     implementation libs.flyway
     runtimeOnly libs.postgresql
-
-    testImplementation libs.starter.test
 }
 
 test {

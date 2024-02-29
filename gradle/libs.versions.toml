@@ -3,6 +3,10 @@ spring-boot = "3.2.2"
 lombok = "1.18.30"
 mapstruct = "1.5.5.Final"
 
+[plugins]
+spring = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version = "1.0.6.RELEASE" }
+
 [libraries]
 spring-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }

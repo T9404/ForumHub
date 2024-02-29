@@ -21,16 +21,36 @@ services:
     image: storage
     container_name: storage
     build:
+      context: storage
       dockerfile: ./Dockerfile
     depends_on:
       - ${POSTGRES_CONTAINER_NAME}
     ports:
-      - '${APP_PORT}:${APP_PORT}'
+      - '${STORAGE_APP_PORT}:${STORAGE_APP_PORT}'
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://${POSTGRES_CONTAINER_NAME}:${POSTGRES_PORT}/${POSTGRES_DB}
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
-      - APP_PORT=${APP_PORT}
+      - POSTGRES_HOST=${POSTGRES_CONTAINER_NAME}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - APP_PORT=${STORAGE_APP_PORT}
+    networks:
+      - default
+
+  gateway:
+    image: gateway
+    container_name: gateway
+    build:
+      context: gateway
+      dockerfile: ./Dockerfile
+    depends_on:
+      - storage
+    ports:
+      - '${GATEWAY_APP_PORT}:${GATEWAY_APP_PORT}'
+    environment:
+      - STORAGE_URL=http://storage:${STORAGE_APP_PORT}
+      - APP_PORT=${GATEWAY_APP_PORT}
+      - STORAGE_APP_HOST=storage
     networks:
       - default
 
