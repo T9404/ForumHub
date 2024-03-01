@@ -1,7 +1,9 @@
 plugins {
-    alias(libs.plugins.spring)
-    alias(libs.plugins.spring.dependency.management)
+    id 'java'
 }
+
+group = 'com.example'
+version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -13,7 +15,9 @@ dependencies {
     annotationProcessor libs.lombok
     testImplementation libs.starter.test
 
-    implementation libs.aws.s3
+    implementation libs.mapstruct
+    annotationProcessor libs.mapstruct.processor
+
     implementation libs.jpa
     implementation libs.flyway
     runtimeOnly libs.postgresql

@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: storage
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:forum}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:123}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:forum}
+    user: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:123}
+    baselineOnMigrate: true
+    baselineVersion: 0
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  config:
+    activate:
+      on-profile: default
+
+server:
+  port: ${FORUM_APP_PORT:8084}

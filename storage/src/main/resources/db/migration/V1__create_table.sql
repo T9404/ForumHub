@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS file (
     file_id UUID PRIMARY KEY,
     name VARCHAR(255),
-    size BIGINT NOT NULL,
+    size BIGINT  NOT NULL,
     time_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

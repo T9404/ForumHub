@@ -16,10 +16,10 @@ import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGe
                 NettyAutoConfiguration.class,
         }
 )
-public class GatewayApplication {
+public class ForumApplication {
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(GatewayApplication.class)
+        new SpringApplicationBuilder(ForumApplication.class)
                 .beanNameGenerator(new FullyQualifiedAnnotationBeanNameGenerator())
                 .run(args);
     }
