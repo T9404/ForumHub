@@ -1,21 +1,23 @@
 package com.example.core.topic;
 
 import com.example.core.category.CategoryService;
-import com.example.public_interface.topic.TopicRequestDto;
-import com.example.public_interface.topic.UpdateTopicRequestDto;
-import com.example.public_interface.topic.CreateTopicResponseDto;
-import com.example.public_interface.topic.TopicResponseDto;
+import com.example.core.common.OrderSortingType;
+import com.example.core.common.PageEvent;
+import com.example.public_interface.topic.*;
 import com.example.rest.configuration.BusinessException;
-import com.example.public_interface.category.CategoryMapper;
-import com.example.public_interface.topic.TopicMapper;
+import com.example.core.category.CategoryMapper;
+import com.example.public_interface.page.PageResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-//TODO: Implement the Role system
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -35,16 +37,24 @@ public class TopicService {
                 .build();
 
         var savedTopic = topicRepository.save(topic);
+        log.info("Topic with id {} has been created", savedTopic.getTopicId());
+
         return new CreateTopicResponseDto(savedTopic.getTopicId());
     }
 
     public void delete(UUID topicId) {
-        topicRepository.deleteById(topicId);
+        var topic = topicRepository.findById(topicId)
+                .orElseThrow(() -> new BusinessException(TopicEvent.TOPIC_NOT_FOUND, "Topic with id " + topicId + " not found"));
+
+        topicRepository.delete(topic);
+        log.info("Topic with id {} has been deleted", topic.getTopicId());
     }
 
     public TopicResponseDto findById(UUID topicId) {
         var topic = topicRepository.findById(topicId)
                 .orElseThrow(() -> new BusinessException(TopicEvent.TOPIC_NOT_FOUND, "Topic with id " + topicId + " not found"));
+
+        log.info("Topic with id {} has been found", topic.getTopicId());
         return TopicMapper.INSTANCE.toResponse(topic);
     }
 
@@ -62,8 +72,43 @@ public class TopicService {
         }
 
         topic.setModificationAt(OffsetDateTime.now());
-
         var updatedTopic = topicRepository.save(topic);
+        log.info("Topic with id {} has been updated", updatedTopic.getTopicId());
+
         return TopicMapper.INSTANCE.toResponse(updatedTopic);
+    }
+
+    public PageResponse<TopicResponseDto> findAll(GetAllTopicsRequestDto request) {
+        validateRequest(request);
+
+        var pageRequest = PageRequest.of(request.page(), request.size(), Objects.equals(request.orderSortingType(), OrderSortingType.DESC.getValue()) ?
+                Sort.Direction.DESC : Sort.Direction.ASC, request.topicSorting());
+
+        var topics = topicRepository.findAll(pageRequest);
+        log.info(topics.getSize() + " topics have been found");
+
+        PageResponse.Metadata metadata = new PageResponse.Metadata(topics.getNumber(), topics.getSize(), topics.getTotalElements());
+
+        return new PageResponse<>(topics.map(TopicMapper.INSTANCE::toResponse).getContent(), metadata);
+    }
+
+    public List<TopicResponseDto> findByName(GetTopicByNameDto request) {
+        var topics = topicRepository.findByNameContainingIgnoreCase(request.name());
+        log.info(topics.size() + " topics have been found");
+
+        return topics.stream().map(TopicMapper.INSTANCE::toResponse).toList();
+    }
+
+    private void validateRequest(GetAllTopicsRequestDto request) {
+        if (request.page() < 0) {
+            throw new BusinessException(PageEvent.INVALID_PAGE_NUMBER, "Page number cannot be less than 0");
+        }
+
+        if (request.size() < 1) {
+            throw new BusinessException(PageEvent.INVALID_PAGE_SIZE, "Page size cannot be less than 1");
+        }
+
+        OrderSortingType.fromValue(request.orderSortingType());
+        TopicSorting.fromValue(request.topicSorting());
     }
 }

@@ -11,9 +11,6 @@ public record MessageResponseDto(
 
         String content,
 
-        @JsonProperty("topic_id")
-        UUID topicId,
-
         @JsonProperty("created_at")
         OffsetDateTime createdAt,
 

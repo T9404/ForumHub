@@ -1,13 +1,18 @@
-package com.example.public_interface.topic;
+package com.example.public_interface.category;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
-public record TopicResponseDto(
-        @JsonProperty("topic_id")
-        UUID topicId,
+public record CategoryHierarchyDto(
+
+        @JsonProperty("category_id")
+        UUID categoryId,
+
+        @JsonProperty("previous_category_id")
+        UUID previousCategoryId,
 
         String name,
 
@@ -18,6 +23,8 @@ public record TopicResponseDto(
         OffsetDateTime modificationAt,
 
         @JsonProperty("creator_id")
-        UUID creatorId
+        UUID creatorId,
+
+        List<CategoryHierarchyDto> children
 ) {
 }

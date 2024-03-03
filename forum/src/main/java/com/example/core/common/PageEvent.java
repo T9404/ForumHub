@@ -1,4 +1,4 @@
-package com.example.core.topic;
+package com.example.core.common;
 
 import com.example.rest.configuration.EventInfo;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum TopicEvent implements EventInfo {
-    TOPIC_NOT_FOUND(HttpStatus.NOT_FOUND, Level.INFO),
-    INVALID_TOPIC_SORTING(HttpStatus.BAD_REQUEST, Level.INFO);
+public enum PageEvent implements EventInfo {
+    INVALID_PAGE_NUMBER(HttpStatus.BAD_REQUEST, Level.INFO),
+    INVALID_PAGE_SIZE(HttpStatus.BAD_REQUEST, Level.INFO),
+    INVALID_ORDER_SORTING_TYPE(HttpStatus.BAD_REQUEST, Level.INFO);
 
     private final HttpStatus status;
     private final Level level;

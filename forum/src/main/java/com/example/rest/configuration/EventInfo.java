@@ -5,5 +5,6 @@ import org.springframework.http.HttpStatus;
 
 public interface EventInfo {
     HttpStatus getStatus();
+
     Level getLevel();
 }

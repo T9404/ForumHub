@@ -6,20 +6,21 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      - POSTGRES_MULTIPLE_DATABASES=${STORAGE_DB},${FORUM_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     expose:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     volumes:
-      - /opt/postgresdata/:/var/lib/postgresql/data
+      - ./postgres-data8:/var/lib/postgresql/data8
+      - ./create-multiple-postgresql-databases.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
     command: -p ${POSTGRES_PORT}
     networks:
       - default
 
   storage:
-    image: storage
-    container_name: storage
+    image: ${STORAGE_APP_NAME}
+    container_name: ${STORAGE_APP_NAME}
     build:
       context: storage
       dockerfile: ./Dockerfile
@@ -32,7 +33,7 @@ services:
       - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_DB=${STORAGE_DB}
       - APP_PORT=${STORAGE_APP_PORT}
     networks:
       - default
@@ -45,12 +46,35 @@ services:
       dockerfile: ./Dockerfile
     depends_on:
       - storage
+      - forum
     ports:
       - '${GATEWAY_APP_PORT}:${GATEWAY_APP_PORT}'
     environment:
       - STORAGE_URL=http://storage:${STORAGE_APP_PORT}
       - APP_PORT=${GATEWAY_APP_PORT}
-      - STORAGE_APP_HOST=storage
+      - STORAGE_APP_HOST=${STORAGE_APP_NAME}
+      - FORUM_APP_PORT=${FORUM_APP_PORT}
+      - FORUM_APP_HOST=${FORUM_APP_NAME}
+    networks:
+      - default
+
+  forum:
+    image: ${FORUM_APP_NAME}
+    container_name: ${FORUM_APP_NAME}
+    build:
+      context: forum
+      dockerfile: ./Dockerfile
+    depends_on:
+      - ${POSTGRES_CONTAINER_NAME}
+    ports:
+      - '${FORUM_APP_PORT}:${FORUM_APP_PORT}'
+    environment:
+      - POSTGRES_HOST=${POSTGRES_CONTAINER_NAME}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${FORUM_DB}
+      - APP_PORT=${FORUM_APP_PORT}
     networks:
       - default
 
@@ -58,3 +82,7 @@ networks:
   default:
     name: ${NETWORK_NAME}
     driver: bridge
+
+volumes:
+  db:
+    driver: local
