@@ -1,11 +1,11 @@
 package com.example.core.topic;
 
-import com.example.core.category.CategoryService;
-import com.example.core.common.OrderSortingType;
-import com.example.core.common.PageEvent;
+import com.example.core.category.db.CategoryService;
+import com.example.core.common.enums.OrderSortingType;
+import com.example.core.common.enums.PageEvent;
 import com.example.public_interface.topic.*;
-import com.example.rest.configuration.BusinessException;
-import com.example.core.category.CategoryMapper;
+import com.example.core.common.BusinessException;
+import com.example.core.category.mapper.CategoryMapper;
 import com.example.public_interface.page.PageResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

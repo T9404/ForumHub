@@ -1,5 +1,6 @@
 package com.example.core.message;
 
+import com.example.core.message.db.MessageEntity;
 import com.example.public_interface.message.MessageResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

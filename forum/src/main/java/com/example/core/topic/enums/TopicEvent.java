@@ -1,6 +1,6 @@
-package com.example.core.message;
+package com.example.core.topic;
 
-import com.example.rest.configuration.EventInfo;
+import com.example.core.common.EventInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.slf4j.event.Level;
@@ -8,9 +8,9 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum MessageEvent implements EventInfo {
-    MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, Level.INFO),
-    TOPIC_ID_IS_REQUIRED(HttpStatus.BAD_REQUEST, Level.WARN);
+public enum TopicEvent implements EventInfo {
+    TOPIC_NOT_FOUND(HttpStatus.NOT_FOUND, Level.INFO),
+    INVALID_TOPIC_SORTING(HttpStatus.BAD_REQUEST, Level.INFO);
 
     private final HttpStatus status;
     private final Level level;

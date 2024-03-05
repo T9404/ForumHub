@@ -1,12 +1,12 @@
 package com.example.core.message;
 
 import com.example.core.topic.TopicService;
-import com.example.core.common.OrderSortingType;
-import com.example.core.common.PageEvent;
+import com.example.core.common.enums.OrderSortingType;
+import com.example.core.common.enums.PageEvent;
 import com.example.public_interface.message.*;
 import com.example.public_interface.topic.GetMessageByTopicRequest;
 import com.example.core.topic.TopicMapper;
-import com.example.rest.configuration.BusinessException;
+import com.example.core.common.BusinessException;
 import com.example.public_interface.page.PageResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

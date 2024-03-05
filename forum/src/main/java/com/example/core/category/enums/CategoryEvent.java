@@ -1,6 +1,6 @@
 package com.example.core.category;
 
-import com.example.rest.configuration.EventInfo;
+import com.example.core.common.EventInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.slf4j.event.Level;

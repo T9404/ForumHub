@@ -1,6 +1,6 @@
 package com.example.core.topic;
 
-import com.example.core.category.CategoryEntity;
+import com.example.core.category.db.CategoryEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

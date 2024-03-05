@@ -1,7 +1,7 @@
 package com.example.core.message;
 
 import com.example.core.topic.TopicEvent;
-import com.example.rest.configuration.BusinessException;
+import com.example.core.common.BusinessException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
