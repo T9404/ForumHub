@@ -3,6 +3,7 @@ package com.example.core.category.db;
 import com.example.core.category.mapper.CategoryMapper;
 import com.example.core.category.enums.CategoryEvent;
 import com.example.core.common.enums.OrderSortingType;
+import com.example.core.topic.db.TopicService;
 import com.example.public_interface.category.*;
 import com.example.core.common.exception.BusinessException;
 import com.example.public_interface.page.PageResponse;
@@ -26,8 +27,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final TopicService topicService;
 
     public CreateCategoryResponseDto save(CreateCategoryRequestDto request) {
+        checkExistsTopics(request);
+
         var category = CategoryEntity.builder()
                 .previousCategoryId(request.previousCategoryId())
                 .name(request.name())
@@ -103,6 +107,10 @@ public class CategoryService {
         return categories.stream().map(CategoryMapper.INSTANCE::toDto).toList();
     }
 
+    public List<CategoryEntity> findChildren(UUID previousCategoryId) {
+        return categoryRepository.findByPreviousCategoryId(previousCategoryId);
+    }
+
     public List<CategoryHierarchyDto> getAllWithHierarchy(GetCategoryRequest request) {
         GetCategoryRequest finalRequest = getFinalRequest(request);
         Comparator<CategoryEntity> comparator = getComparator(finalRequest);
@@ -112,6 +120,17 @@ public class CategoryService {
                 .sorted(comparator)
                 .map(category -> buildCategoryHierarchy(category, finalRequest))
                 .collect(Collectors.toList());
+    }
+
+    private void checkExistsTopics(CreateCategoryRequestDto request) {
+        var previousCategory = categoryRepository.findById(request.previousCategoryId())
+                .orElseThrow(() -> new BusinessException(CategoryEvent.CATEGORY_NOT_FOUND, "Category with id " + request.previousCategoryId() + " not found"));
+
+        var topicPreviousCategories = topicService.findTopicsByCategory(previousCategory);
+
+        if (!topicPreviousCategories.isEmpty()) {
+            throw new BusinessException(CategoryEvent.CATEGORY_HAS_TOPICS, "Category with id " + request.previousCategoryId() + " has topics");
+        }
     }
 
     private GetCategoryRequest getFinalRequest(GetCategoryRequest request) {

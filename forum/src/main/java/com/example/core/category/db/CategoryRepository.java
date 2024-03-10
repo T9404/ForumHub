@@ -10,5 +10,5 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, UUID> 
 
     List<CategoryEntity> findByPreviousCategoryId(UUID previousCategoryId);
 
-    List<CategoryEntity>    findByPreviousCategoryIdIsNull();
+    List<CategoryEntity> findByPreviousCategoryIdIsNull();
 }

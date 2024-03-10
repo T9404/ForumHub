@@ -1,11 +1,14 @@
 package com.example.core.topic.db;
 
+import com.example.core.category.db.CategoryEntity;
 import com.example.core.category.db.CategoryService;
+import com.example.core.category.enums.CategoryEvent;
 import com.example.core.common.enums.OrderSortingType;
 import com.example.core.common.enums.PageEvent;
 import com.example.core.topic.enums.TopicEvent;
 import com.example.core.topic.mapper.TopicMapper;
 import com.example.core.topic.enums.TopicSorting;
+import com.example.public_interface.category.CategoryResponseDto;
 import com.example.public_interface.topic.*;
 import com.example.core.common.exception.BusinessException;
 import com.example.core.category.mapper.CategoryMapper;
@@ -34,6 +37,8 @@ public class TopicService {
     public CreateTopicResponseDto save(TopicRequestDto request) {
         var category = categoryService.findById(request.categoryId());
 
+        checkLastPositionHierarchy(category);
+
         var topic = TopicEntity.builder()
                 .name(request.name())
                 .category(CategoryMapper.INSTANCE.toEntity(category))
@@ -46,6 +51,10 @@ public class TopicService {
         log.info("Topic with id {} has been created", savedTopic.getTopicId());
 
         return new CreateTopicResponseDto(savedTopic.getTopicId());
+    }
+
+    public List<TopicEntity> findTopicsByCategory(CategoryEntity category) {
+        return topicRepository.findAllByCategory(category);
     }
 
     public void delete(UUID topicId) {
@@ -103,6 +112,13 @@ public class TopicService {
         log.info(topics.size() + " topics have been found");
 
         return topics.stream().map(TopicMapper.INSTANCE::toResponse).toList();
+    }
+
+    private void checkLastPositionHierarchy(CategoryResponseDto category) {
+        var childrenCategories = categoryService.findChildren(category.categoryId());
+        if (!childrenCategories.isEmpty()) {
+            throw new BusinessException(CategoryEvent.CATEGORY_IS_NOT_LEAF, "Category with id " + category.categoryId() + " has children");
+        }
     }
 
     private void validateRequest(GetAllTopicsRequestDto request) {
