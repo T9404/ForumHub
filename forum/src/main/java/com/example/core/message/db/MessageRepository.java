@@ -1,4 +1,4 @@
-package com.example.core.message;
+package com.example.core.message.db;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

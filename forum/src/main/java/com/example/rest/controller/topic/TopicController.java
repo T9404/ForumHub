@@ -1,8 +1,11 @@
 package com.example.rest.controller.topic;
 
-import com.example.core.topic.TopicService;
+import com.example.core.topic.db.TopicService;
 import com.example.public_interface.topic.*;
 import com.example.public_interface.page.PageResponse;
+import com.example.rest.controller.topic.dto.GetAllTopicsRequestDto;
+import com.example.rest.controller.topic.dto.TopicRequestDto;
+import com.example.rest.controller.topic.dto.UpdateTopicRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

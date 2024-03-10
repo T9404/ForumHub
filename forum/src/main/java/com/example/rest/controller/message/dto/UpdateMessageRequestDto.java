@@ -1,4 +1,4 @@
-package com.example.public_interface.message;
+package com.example.rest.controller.message.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

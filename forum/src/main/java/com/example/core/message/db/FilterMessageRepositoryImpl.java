@@ -1,7 +1,7 @@
-package com.example.core.message;
+package com.example.core.message.db;
 
+import com.example.core.message.dto.MessageFilter;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -29,7 +29,7 @@ public class FilterMessageRepositoryImpl implements FilterMessageRepository {
         int page = pageRequest.getPageNumber();
         int size = pageRequest.getPageSize();
         int startPosition = page * size;
-        TypedQuery<MessageEntity> query = entityManager.createQuery(criteria);
+        var query = entityManager.createQuery(criteria);
         query.setFirstResult(startPosition);
         query.setMaxResults(size);
 

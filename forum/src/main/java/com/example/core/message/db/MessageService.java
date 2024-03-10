@@ -1,13 +1,19 @@
-package com.example.core.message;
+package com.example.core.message.db;
 
-import com.example.core.topic.TopicService;
+import com.example.core.message.enums.MessageEvent;
+import com.example.core.message.dto.MessageFilter;
+import com.example.core.message.mapper.MessageMapper;
+import com.example.core.message.enums.MessageSorting;
+import com.example.core.topic.db.TopicService;
 import com.example.core.common.enums.OrderSortingType;
 import com.example.core.common.enums.PageEvent;
 import com.example.public_interface.message.*;
-import com.example.public_interface.topic.GetMessageByTopicRequest;
-import com.example.core.topic.TopicMapper;
-import com.example.core.common.BusinessException;
+import com.example.rest.controller.topic.dto.GetMessageByTopicRequest;
+import com.example.core.topic.mapper.TopicMapper;
+import com.example.core.common.exception.BusinessException;
 import com.example.public_interface.page.PageResponse;
+import com.example.rest.controller.message.dto.CreateMessageRequestDto;
+import com.example.rest.controller.message.dto.UpdateMessageRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

@@ -1,4 +1,4 @@
-package com.example.core.topic;
+package com.example.core.topic.db;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

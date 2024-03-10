@@ -1,8 +1,11 @@
 package com.example.rest.controller.category;
 
-import com.example.core.category.CategoryService;
+import com.example.core.category.db.CategoryService;
 import com.example.public_interface.category.*;
 import com.example.public_interface.page.PageResponse;
+import com.example.rest.controller.category.dto.CreateCategoryRequestDto;
+import com.example.rest.controller.category.dto.GetCategoryRequest;
+import com.example.rest.controller.category.dto.UpdateCategoryRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +40,8 @@ public class CategoryController {
     }
 
     @GetMapping("/hierarchy")
-    public List<CategoryHierarchyDto> getAllCategories() {
-        return categoryService.getAllWithHierarchy();
+    public List<CategoryHierarchyDto> getAllCategories(@RequestBody GetCategoryRequest request) {
+        return categoryService.getAllWithHierarchy(request);
     }
 
     @GetMapping("/all/{page}/{size}")

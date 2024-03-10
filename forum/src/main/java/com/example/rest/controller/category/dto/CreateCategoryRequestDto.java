@@ -1,4 +1,4 @@
-package com.example.public_interface.category;
+package com.example.rest.controller.category.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

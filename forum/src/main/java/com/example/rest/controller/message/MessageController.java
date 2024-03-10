@@ -1,10 +1,12 @@
 package com.example.rest.controller.message;
 
-import com.example.core.message.MessageFilter;
-import com.example.core.message.MessageService;
+import com.example.core.message.dto.MessageFilter;
+import com.example.core.message.db.MessageService;
 import com.example.public_interface.message.*;
-import com.example.public_interface.topic.GetMessageByTopicRequest;
+import com.example.rest.controller.topic.dto.GetMessageByTopicRequest;
 import com.example.public_interface.page.PageResponse;
+import com.example.rest.controller.message.dto.CreateMessageRequestDto;
+import com.example.rest.controller.message.dto.UpdateMessageRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;

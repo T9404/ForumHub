@@ -1,4 +1,4 @@
-package com.example.core.message;
+package com.example.core.message.mapper;
 
 import com.example.core.message.db.MessageEntity;
 import com.example.public_interface.message.MessageResponseDto;

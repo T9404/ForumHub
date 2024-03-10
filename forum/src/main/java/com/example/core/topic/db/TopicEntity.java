@@ -1,4 +1,4 @@
-package com.example.core.topic;
+package com.example.core.topic.db;
 
 import com.example.core.category.db.CategoryEntity;
 import jakarta.persistence.*;

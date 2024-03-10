@@ -1,5 +1,6 @@
-package com.example.core.category;
+package com.example.core.category.mapper;
 
+import com.example.core.category.db.CategoryEntity;
 import com.example.public_interface.category.CategoryResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

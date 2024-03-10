@@ -1,12 +1,18 @@
-package com.example.core.topic;
+package com.example.core.topic.db;
 
 import com.example.core.category.db.CategoryService;
 import com.example.core.common.enums.OrderSortingType;
 import com.example.core.common.enums.PageEvent;
+import com.example.core.topic.enums.TopicEvent;
+import com.example.core.topic.mapper.TopicMapper;
+import com.example.core.topic.enums.TopicSorting;
 import com.example.public_interface.topic.*;
-import com.example.core.common.BusinessException;
+import com.example.core.common.exception.BusinessException;
 import com.example.core.category.mapper.CategoryMapper;
 import com.example.public_interface.page.PageResponse;
+import com.example.rest.controller.topic.dto.GetAllTopicsRequestDto;
+import com.example.rest.controller.topic.dto.TopicRequestDto;
+import com.example.rest.controller.topic.dto.UpdateTopicRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

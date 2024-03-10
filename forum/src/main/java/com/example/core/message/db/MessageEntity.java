@@ -1,6 +1,6 @@
-package com.example.core.message;
+package com.example.core.message.db;
 
-import com.example.core.topic.TopicEntity;
+import com.example.core.topic.db.TopicEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

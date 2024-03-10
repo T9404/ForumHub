@@ -1,4 +1,4 @@
-package com.example.core.category;
+package com.example.core.category.db;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,5 +10,5 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, UUID> 
 
     List<CategoryEntity> findByPreviousCategoryId(UUID previousCategoryId);
 
-    List<CategoryEntity> findByPreviousCategoryIdIsNull();
+    List<CategoryEntity>    findByPreviousCategoryIdIsNull();
 }

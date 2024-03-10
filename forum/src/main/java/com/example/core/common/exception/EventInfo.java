@@ -1,4 +1,4 @@
-package com.example.rest.configuration;
+package com.example.core.common.exception;
 
 import org.slf4j.event.Level;
 import org.springframework.http.HttpStatus;

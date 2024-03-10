@@ -1,4 +1,4 @@
-package com.example.core.category;
+package com.example.core.category.db;
 
 import jakarta.persistence.*;
 import lombok.*;

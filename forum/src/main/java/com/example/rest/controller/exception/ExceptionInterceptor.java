@@ -1,5 +1,6 @@
-package com.example.rest.configuration;
+package com.example.rest.controller.exception;
 
+import com.example.core.common.exception.BusinessException;
 import com.example.public_interface.error.ErrorResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.event.Level;

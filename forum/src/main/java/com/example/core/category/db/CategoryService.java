@@ -1,8 +1,14 @@
-package com.example.core.category;
+package com.example.core.category.db;
 
+import com.example.core.category.mapper.CategoryMapper;
+import com.example.core.category.enums.CategoryEvent;
+import com.example.core.common.enums.OrderSortingType;
 import com.example.public_interface.category.*;
-import com.example.core.common.BusinessException;
+import com.example.core.common.exception.BusinessException;
 import com.example.public_interface.page.PageResponse;
+import com.example.rest.controller.category.dto.CreateCategoryRequestDto;
+import com.example.rest.controller.category.dto.GetCategoryRequest;
+import com.example.rest.controller.category.dto.UpdateCategoryRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -96,16 +103,30 @@ public class CategoryService {
         return categories.stream().map(CategoryMapper.INSTANCE::toDto).toList();
     }
 
-    public List<CategoryHierarchyDto> getAllWithHierarchy() {
-        return categoryRepository.findByPreviousCategoryIdIsNull().stream()
-                .map(this::buildCategoryHierarchy)
+    public List<CategoryHierarchyDto> getAllWithHierarchy(GetCategoryRequest request) {
+        GetCategoryRequest finalRequest = getFinalRequest(request);
+        Comparator<CategoryEntity> comparator = getComparator(finalRequest);
+
+        return categoryRepository.findByPreviousCategoryIdIsNull()
+                .stream()
+                .sorted(comparator)
+                .map(category -> buildCategoryHierarchy(category, finalRequest))
                 .collect(Collectors.toList());
     }
 
-    private CategoryHierarchyDto buildCategoryHierarchy(CategoryEntity category) {
+    private GetCategoryRequest getFinalRequest(GetCategoryRequest request) {
+        return new GetCategoryRequest(
+                Optional.ofNullable(request.topicSorting()).orElse("name"),
+                Optional.ofNullable(request.topicDirection()).orElse(OrderSortingType.ASC.name())
+        );
+    }
+
+    private CategoryHierarchyDto buildCategoryHierarchy(CategoryEntity category, GetCategoryRequest request) {
+        Comparator<CategoryEntity> comparator = getComparator(request);
+
         var children = categoryRepository.findByPreviousCategoryId(category.getCategoryId()).stream()
-                .map(this::buildCategoryHierarchy)
-                .sorted(Comparator.comparing(CategoryHierarchyDto::createdAt))
+                .sorted(comparator)
+                .map(child -> buildCategoryHierarchy(child, request))
                 .collect(Collectors.toList());
 
         return new CategoryHierarchyDto(
@@ -117,5 +138,29 @@ public class CategoryService {
                 category.getCreatorId(),
                 children
         );
+    }
+
+    private Comparator<CategoryEntity> getComparator(GetCategoryRequest request) {
+        Comparator<CategoryEntity> comparator;
+
+        switch (request.topicSorting().toString()) {
+            case "name":
+                comparator = Comparator.comparing(CategoryEntity::getName);
+                break;
+            case "created_at":
+                comparator = Comparator.comparing(CategoryEntity::getCreatedAt);
+                break;
+            case "modification_at":
+                comparator = Comparator.comparing(CategoryEntity::getModificationAt);
+                break;
+            default:
+                comparator = Comparator.comparing(CategoryEntity::getName);
+        }
+
+        if ("desc".equalsIgnoreCase(request.topicDirection())) {
+            comparator = comparator.reversed();
+        }
+
+        return comparator;
     }
 }
