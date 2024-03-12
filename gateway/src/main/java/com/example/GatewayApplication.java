@@ -8,14 +8,7 @@ import org.springframework.boot.autoconfigure.websocket.servlet.WebSocketServlet
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator;
 
-@SpringBootApplication(
-        exclude = {
-                GsonAutoConfiguration.class,
-                MultipartAutoConfiguration.class,
-                WebSocketServletAutoConfiguration.class,
-                NettyAutoConfiguration.class,
-        }
-)
+@SpringBootApplication
 public class GatewayApplication {
 
     public static void main(String[] args) {

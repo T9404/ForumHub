@@ -2,24 +2,42 @@ spring:
   application:
     name: storage
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:storage}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:123}
     driver-class-name: org.postgresql.Driver
   flyway:
-    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
-    user: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:storage}
+    user: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:123}
     baselineOnMigrate: true
     baselineVersion: 0
   jpa:
     hibernate:
       ddl-auto: validate
+  config:
+    activate:
+      on-profile: default
   servlet:
     multipart:
       enabled: true
-      max-file-size: 1GB
-      max-request-size: 1GB
-  config:
-    activate:
-      on-profile: dev
+      max-file-size: 4GB
+      max-request-size: 4GB
+
+cloud:
+  aws:
+    credentials:
+      id-key: YCAJEhWNt9PogRNCBtr-aJjU_
+      secret-key: YCN6swfzOAth6Vrru9f1IiRcz9n27Guk8ydJlHt0
+    region:
+      static: ru-central1
+    endpoint: storage.yandexcloud.net
+    stack:
+      auto: false
+
+application:
+  bucket:
+    name: hits
+
+server:
+  port: ${STORAGE_APP_PORT:8082}

@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.websocket.servlet.WebSocketServlet
 @SpringBootApplication(
         exclude = {
                 GsonAutoConfiguration.class,
-                MultipartAutoConfiguration.class,
                 WebSocketServletAutoConfiguration.class,
                 NettyAutoConfiguration.class,
         }
