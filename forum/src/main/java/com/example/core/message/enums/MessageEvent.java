@@ -10,7 +10,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum MessageEvent implements EventInfo {
     MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, Level.INFO),
-    TOPIC_ID_IS_REQUIRED(HttpStatus.BAD_REQUEST, Level.WARN);
+    TOPIC_ID_IS_REQUIRED(HttpStatus.BAD_REQUEST, Level.INFO),
+    MESSAGE_ID_IS_REQUIRED(HttpStatus.BAD_REQUEST, Level.INFO);
 
     private final HttpStatus status;
     private final Level level;

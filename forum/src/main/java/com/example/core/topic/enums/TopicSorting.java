@@ -11,14 +11,14 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum TopicSorting {
     NAME("name"),
-    CREATED_AT("createdAt");
+    CREATED_AT("created_at");
 
     private final String value;
 
     @JsonCreator
     public static TopicSorting fromValue(String value) {
         return Arrays.stream(TopicSorting.values())
-                .filter(orderSortingType -> orderSortingType.value.equals(value))
+                .filter(orderSortingType -> orderSortingType.value.equals(value.toLowerCase()))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(TopicEvent.INVALID_TOPIC_SORTING, "Invalid order sorting type"));
     }

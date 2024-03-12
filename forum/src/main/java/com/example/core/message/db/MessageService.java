@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,6 +57,10 @@ public class MessageService {
     }
 
     public MessageResponseDto update(UpdateMessageRequestDto request) {
+        if (request.messageId() == null) {
+            throw new BusinessException(MessageEvent.MESSAGE_ID_IS_REQUIRED, "Message id is required");
+        }
+
         var message = messageRepository.findById(request.messageId())
                 .orElseThrow(() -> new BusinessException(MessageEvent.MESSAGE_NOT_FOUND, "Message with id " + request.messageId() + " not found"));
 
@@ -79,7 +84,10 @@ public class MessageService {
         var messages = messageRepository.findByContentContainingIgnoreCase(request.content());
         log.info("Messages with content {} have been found", request.content());
 
-        return messages.stream().map(MessageMapper.INSTANCE::toResponse).toList();
+        return messages.stream()
+                .map(MessageMapper.INSTANCE::toResponse)
+                .sorted(Comparator.comparing(MessageResponseDto::content))
+                .toList();
     }
 
     public PageResponse<MessageResponseDto> findAll(MessageFilter filter, PageRequest pageRequest) {
@@ -90,8 +98,10 @@ public class MessageService {
                 .map(MessageMapper.INSTANCE::toResponse)
                 .toList();
 
+        int count = messageRepository.count(filter);
+
         PageResponse.Metadata metadata =
-                new PageResponse.Metadata(pageRequest.getPageNumber(), pageRequest.getPageSize(), messages.size());
+                new PageResponse.Metadata(pageRequest.getPageNumber(), pageRequest.getPageSize(), count);
 
         return new PageResponse<>(messageResponseDtos, metadata);
     }

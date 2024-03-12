@@ -18,6 +18,7 @@ import com.example.rest.controller.topic.dto.TopicRequestDto;
 import com.example.rest.controller.topic.dto.UpdateTopicRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -29,13 +30,17 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@AllArgsConstructor
 public class TopicService {
     private final TopicRepository topicRepository;
     private final CategoryService categoryService;
 
+    public TopicService(TopicRepository topicRepository, @Lazy CategoryService categoryService) {
+        this.topicRepository = topicRepository;
+        this.categoryService = categoryService;
+    }
+
     public CreateTopicResponseDto save(TopicRequestDto request) {
-        var category = categoryService.findById(request.categoryId());
+        var category = getCategory(request.categoryId());
 
         checkLastPositionHierarchy(category);
 
@@ -94,10 +99,10 @@ public class TopicService {
     }
 
     public PageResponse<TopicResponseDto> findAll(GetAllTopicsRequestDto request) {
-        validateRequest(request);
+        var finalRequest = validateRequest(request);
 
-        var pageRequest = PageRequest.of(request.page(), request.size(), Objects.equals(request.orderSortingType(), OrderSortingType.DESC.getValue()) ?
-                Sort.Direction.DESC : Sort.Direction.ASC, request.topicSorting());
+        var pageRequest = PageRequest.of(finalRequest.page(), finalRequest.size(), Objects.equals(finalRequest.orderSortingType(), OrderSortingType.DESC.getValue()) ?
+                Sort.Direction.DESC : Sort.Direction.ASC, finalRequest.topicSorting());
 
         var topics = topicRepository.findAll(pageRequest);
         log.info(topics.getSize() + " topics have been found");
@@ -114,6 +119,14 @@ public class TopicService {
         return topics.stream().map(TopicMapper.INSTANCE::toResponse).toList();
     }
 
+    private CategoryResponseDto getCategory(UUID categoryId) {
+        if (categoryId == null) {
+            throw new BusinessException(CategoryEvent.CATEGORY_INVALID_ID, "Category id cannot be null");
+        }
+
+        return categoryService.findById(categoryId);
+    }
+
     private void checkLastPositionHierarchy(CategoryResponseDto category) {
         var childrenCategories = categoryService.findChildren(category.categoryId());
         if (!childrenCategories.isEmpty()) {
@@ -121,7 +134,7 @@ public class TopicService {
         }
     }
 
-    private void validateRequest(GetAllTopicsRequestDto request) {
+    private GetAllTopicsRequestDto validateRequest(GetAllTopicsRequestDto request) {
         if (request.page() < 0) {
             throw new BusinessException(PageEvent.INVALID_PAGE_NUMBER, "Page number cannot be less than 0");
         }
@@ -130,7 +143,11 @@ public class TopicService {
             throw new BusinessException(PageEvent.INVALID_PAGE_SIZE, "Page size cannot be less than 1");
         }
 
-        OrderSortingType.fromValue(request.orderSortingType());
-        TopicSorting.fromValue(request.topicSorting());
+        return GetAllTopicsRequestDto.builder()
+                .orderSortingType(OrderSortingType.fromValue(request.orderSortingType().toString()).getValue())
+                .topicSorting(TopicSorting.fromValue(request.topicSorting().toString()).getValue())
+                .page(request.page())
+                .size(request.size())
+                .build();
     }
 }

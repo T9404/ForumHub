@@ -21,7 +21,7 @@ public class CategoryController {
 
     @PostMapping("/creating")
     public CreateCategoryResponseDto createCategory(@RequestBody CreateCategoryRequestDto request) {
-        return categoryService.save(request);
+        return categoryService.create(request);
     }
 
     @PatchMapping("/updating")
@@ -40,7 +40,7 @@ public class CategoryController {
     }
 
     @GetMapping("/hierarchy")
-    public List<CategoryHierarchyDto> getAllCategories(@RequestBody GetCategoryRequest request) {
+    public List<CategoryHierarchyDto> getAllCategoriesWithHierarchy(@RequestBody GetCategoryRequest request) {
         return categoryService.getAllWithHierarchy(request);
     }
 

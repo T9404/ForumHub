@@ -1,9 +1,11 @@
 package com.example.rest.controller.category.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 
 import java.util.UUID;
 
+@Builder
 public record UpdateCategoryRequestDto(
         @JsonProperty("category_id")
         UUID categoryId,

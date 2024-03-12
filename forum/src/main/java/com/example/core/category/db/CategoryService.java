@@ -10,8 +10,8 @@ import com.example.public_interface.page.PageResponse;
 import com.example.rest.controller.category.dto.CreateCategoryRequestDto;
 import com.example.rest.controller.category.dto.GetCategoryRequest;
 import com.example.rest.controller.category.dto.UpdateCategoryRequestDto;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +24,17 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@AllArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final TopicService topicService;
 
-    public CreateCategoryResponseDto save(CreateCategoryRequestDto request) {
-        checkExistsTopics(request);
+    public CategoryService(CategoryRepository categoryRepository, @Lazy TopicService topicService) {
+        this.categoryRepository = categoryRepository;
+        this.topicService = topicService;
+    }
+
+    public CreateCategoryResponseDto create(CreateCategoryRequestDto request) {
+        checkPreviousCategoryId(request.previousCategoryId());
 
         var category = CategoryEntity.builder()
                 .previousCategoryId(request.previousCategoryId())
@@ -50,7 +54,11 @@ public class CategoryService {
         var category = categoryRepository.findById(request.categoryId())
                 .orElseThrow(() -> new BusinessException(CategoryEvent.CATEGORY_NOT_FOUND, "Category with id " + request.categoryId() + " not found"));
 
-        category.setPreviousCategoryId(request.previousCategoryId());
+        if (request.previousCategoryId() != null) {
+            checkPreviousCategoryId(request.previousCategoryId());
+            category.setPreviousCategoryId(request.previousCategoryId());
+        }
+
         category.setName(request.name());
         category.setModificationAt(OffsetDateTime.now());
 
@@ -70,6 +78,12 @@ public class CategoryService {
     public void delete(UUID categoryId) {
         var category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new BusinessException(CategoryEvent.CATEGORY_NOT_FOUND, "Category with id " + categoryId + " not found"));
+
+        var topics = topicService.findTopicsByCategory(category);
+        if (!topics.isEmpty()) {
+            throw new BusinessException(CategoryEvent.CATEGORY_HAS_TOPICS, "Category with id " + categoryId + " has topics");
+        }
+
         categoryRepository.delete(category);
         log.info("Category with id {} has been deleted", category.getCategoryId());
     }
@@ -91,12 +105,13 @@ public class CategoryService {
 
     public PageResponse<CategoryResponseDto> findAll(PageRequest pageRequest) {
         var categories = categoryRepository.findAll(pageRequest);
+
+        var categoriesDto = categories.getContent().stream()
+                .map(CategoryMapper.INSTANCE::toDto)
+                .toList();
+
         log.info(categories.getTotalElements() + " categories have been found");
-
         PageResponse.Metadata metadata = new PageResponse.Metadata(categories.getNumber(), categories.getSize(), categories.getTotalElements());
-
-        var categoriesDto = categories.map(CategoryMapper.INSTANCE::toDto).getContent();
-
         return new PageResponse<>(categoriesDto, metadata);
     }
 
@@ -122,14 +137,18 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    private void checkExistsTopics(CreateCategoryRequestDto request) {
-        var previousCategory = categoryRepository.findById(request.previousCategoryId())
-                .orElseThrow(() -> new BusinessException(CategoryEvent.CATEGORY_NOT_FOUND, "Category with id " + request.previousCategoryId() + " not found"));
+    private void checkPreviousCategoryId(UUID previousCategoryId) {
+        if (previousCategoryId == null) {
+            return;
+        }
+
+        var previousCategory = categoryRepository.findById(previousCategoryId)
+                .orElseThrow(() -> new BusinessException(CategoryEvent.CATEGORY_NOT_FOUND, "Category with id " + previousCategoryId + " not found"));
 
         var topicPreviousCategories = topicService.findTopicsByCategory(previousCategory);
 
         if (!topicPreviousCategories.isEmpty()) {
-            throw new BusinessException(CategoryEvent.CATEGORY_HAS_TOPICS, "Category with id " + request.previousCategoryId() + " has topics");
+            throw new BusinessException(CategoryEvent.CATEGORY_HAS_TOPICS, "Category with id " + previousCategoryId + " has topics");
         }
     }
 
@@ -160,21 +179,12 @@ public class CategoryService {
     }
 
     private Comparator<CategoryEntity> getComparator(GetCategoryRequest request) {
-        Comparator<CategoryEntity> comparator;
-
-        switch (request.topicSorting().toString()) {
-            case "name":
-                comparator = Comparator.comparing(CategoryEntity::getName);
-                break;
-            case "created_at":
-                comparator = Comparator.comparing(CategoryEntity::getCreatedAt);
-                break;
-            case "modification_at":
-                comparator = Comparator.comparing(CategoryEntity::getModificationAt);
-                break;
-            default:
-                comparator = Comparator.comparing(CategoryEntity::getName);
-        }
+        Comparator<CategoryEntity> comparator = switch (request.topicSorting().toLowerCase()) {
+            case "name" -> Comparator.comparing(CategoryEntity::getName);
+            case "created_at" -> Comparator.comparing(CategoryEntity::getCreatedAt);
+            case "modification_at" -> Comparator.comparing(CategoryEntity::getModificationAt);
+            default -> Comparator.comparing(CategoryEntity::getName);
+        };
 
         if ("desc".equalsIgnoreCase(request.topicDirection())) {
             comparator = comparator.reversed();

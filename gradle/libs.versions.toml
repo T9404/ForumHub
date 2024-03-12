@@ -2,6 +2,8 @@
 spring-boot = "3.2.2"
 lombok = "1.18.30"
 mapstruct = "1.5.5.Final"
+testcontainers = "1.19.1"
+junit-jupiter = "5.10.0"
 
 [plugins]
 spring = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -33,3 +35,8 @@ aws-s3 = { module = "org.springframework.cloud:spring-cloud-starter-aws", versio
 
 # Test
 starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
+testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
+jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+jupiter-testcontainers = { module = "org.testcontainers:junit-jupiter", version = "1.19.1" }
+postgresql-testcontainers = { module = "org.testcontainers:postgresql" }
+rest-assured = { module = "io.rest-assured:rest-assured" }

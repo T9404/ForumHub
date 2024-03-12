@@ -17,8 +17,9 @@ public enum OrderSortingType {
 
     @JsonCreator
     public static OrderSortingType fromValue(String value) {
+        String lowerCaseValue = value.toLowerCase();
         return Arrays.stream(OrderSortingType.values())
-                .filter(orderSortingType -> orderSortingType.value.equals(value))
+                .filter(orderSortingType -> orderSortingType.value.equals(lowerCaseValue))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(PageEvent.INVALID_ORDER_SORTING_TYPE, "Invalid order sorting type"));
     }
