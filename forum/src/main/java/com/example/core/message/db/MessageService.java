@@ -10,7 +10,7 @@ import com.example.core.common.enums.PageEvent;
 import com.example.public_interface.message.*;
 import com.example.rest.controller.topic.dto.GetMessageByTopicRequest;
 import com.example.core.topic.mapper.TopicMapper;
-import com.example.core.common.exception.BusinessException;
+import com.example.core.common.BusinessException;
 import com.example.public_interface.page.PageResponse;
 import com.example.rest.controller.message.dto.CreateMessageRequestDto;
 import com.example.rest.controller.message.dto.UpdateMessageRequestDto;

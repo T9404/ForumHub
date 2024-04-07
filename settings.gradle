@@ -3,4 +3,6 @@ rootProject.name = 'hits'
 include 'storage'
 include 'gateway'
 include 'forum'
-
+include 'auth'
+include 'common'
+include 'test'

@@ -1,7 +1,7 @@
 package com.example.controller;
 
-import com.example.dto.FileDto;
-import com.example.dto.UploadResponseDto;
+import com.example.security.dto.FileDto;
+import com.example.security.dto.UploadResponseDto;
 import com.example.service.StorageService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -5,7 +5,7 @@ import com.example.core.category.enums.CategoryEvent;
 import com.example.core.common.enums.OrderSortingType;
 import com.example.core.topic.db.TopicService;
 import com.example.public_interface.category.*;
-import com.example.core.common.exception.BusinessException;
+import com.example.core.common.BusinessException;
 import com.example.public_interface.page.PageResponse;
 import com.example.rest.controller.category.dto.CreateCategoryRequestDto;
 import com.example.rest.controller.category.dto.GetCategoryRequest;

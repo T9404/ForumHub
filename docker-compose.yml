@@ -14,7 +14,28 @@ services:
     volumes:
       - ./postgres-data8:/var/lib/postgresql/data8
       - ./create-multiple-postgresql-databases.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "db_prod" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     command: -p ${POSTGRES_PORT}
+    networks:
+      - default
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - redis:/var/lib/redis/data
     networks:
       - default
 
@@ -85,4 +106,6 @@ networks:
 
 volumes:
   db:
+    driver: local
+  redis:
     driver: local

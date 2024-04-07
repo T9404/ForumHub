@@ -1,0 +1,24 @@
+plugins {
+    alias(libs.plugins.spring)
+    alias(libs.plugins.spring.dependency.management)
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation libs.spring.web
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+
+    implementation libs.spring.security
+    implementation libs.jwt.api
+    runtimeOnly libs.jwt.impl
+    runtimeOnly libs.jwt.jackson
+    implementation libs.utils
+}
+
+test {
+    useJUnitPlatform()
+}

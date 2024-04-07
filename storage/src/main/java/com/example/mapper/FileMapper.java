@@ -1,6 +1,6 @@
 package com.example.mapper;
 
-import com.example.dto.FileDto;
+import com.example.security.dto.FileDto;
 import com.example.entity.FileEntity;
 
 public final class FileMapper {

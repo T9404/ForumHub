@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.dto.ErrorResponse;
+import com.example.security.dto.ErrorResponse;
 import com.example.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.event.Level;

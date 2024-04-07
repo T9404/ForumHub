@@ -1,0 +1,41 @@
+plugins {
+    alias(libs.plugins.spring)
+    alias(libs.plugins.spring.dependency.management)
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation libs.spring.web
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+
+    implementation libs.jpa
+    implementation libs.flyway
+    runtimeOnly libs.postgresql
+
+    implementation libs.spring.validation
+    implementation libs.spring.security
+    implementation libs.jwt.api
+    runtimeOnly libs.jwt.impl
+    runtimeOnly libs.jwt.jackson
+    implementation libs.spring.redis
+    implementation libs.redis.client
+    implementation libs.utils
+
+    implementation libs.mail
+
+    implementation project(':common')
+    testImplementation libs.jupiter
+    testImplementation libs.starter.test
+    testImplementation libs.testcontainers
+    testImplementation libs.jupiter.testcontainers
+    testImplementation libs.postgresql.testcontainers
+    testImplementation libs.rest.assured
+}
+
+test {
+    useJUnitPlatform()
+}

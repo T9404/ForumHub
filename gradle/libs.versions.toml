@@ -4,6 +4,8 @@ lombok = "1.18.30"
 mapstruct = "1.5.5.Final"
 testcontainers = "1.19.1"
 junit-jupiter = "5.10.0"
+jwt = "0.12.5"
+mail = "3.1.5"
 
 [plugins]
 spring = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -12,6 +14,10 @@ spring-dependency-management = { id = "io.spring.dependency-management", version
 [libraries]
 spring-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+utils = { module = 'org.apache.commons:commons-lang3', version = "3.14.0" }
+
+#Mail
+mail = { module = "org.springframework.boot:spring-boot-starter-mail", version.ref = "mail" }
 
 #Mapper
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
@@ -25,6 +31,19 @@ webflux = { module = "org.springframework.boot:spring-boot-starter-webflux", ver
 jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
 flyway = { module = "org.flywaydb:flyway-core", version = "8.5.13" }
 postgresql = { module = "org.postgresql:postgresql", version = "42.2.24" }
+
+# Validation
+spring-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+
+# Security
+spring-security = { module = "org.springframework.boot:spring-boot-starter-security", version = "3.2.3" }
+jwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jwt" }
+jwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jwt" }
+jwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jwt" }
+
+# Redis
+spring-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis", version = "3.2.3" }
+redis-client = { module = "redis.clients:jedis", version = "5.1.2" }
 
 # Swagger
 webmvc = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version = "2.3.0" }

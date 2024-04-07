@@ -1,0 +1,64 @@
+spring:
+  application:
+    name: auth
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:auth}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:123}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:auth}
+    user: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:123}
+    baselineOnMigrate: true
+    baselineVersion: 0
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  config:
+    activate:
+      on-profile: default
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            required: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+logging:
+  level:
+    org.springframework.security: TRACE
+
+server:
+  port: ${AUTH_APP_PORT:8085}
+
+jwt:
+  token:
+    access:
+      expiration: 900000 # (15 minutes)
+      secret: 13A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+    refresh:
+      expiration: 1296000000 # (15 days)
+      secret: 33A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327851
+
+verification:
+  token:
+    expiration: 900 # In seconds (15 minutes)
+
+mail:
+  default-encoding: UTF-8
+  host: smtp.gmail.com
+  username: businessmyhomeq@gmail.com
+  password: ocebvucvtygzckwx
+  port: 587
+  protocol: smtp
+
+application:
+  email:
+    subject: "Email Confirmation"
+    content: "Please confirm your email address by clicking the link below: http://localhost:8085/api/v1/auth/verification?token=%s"

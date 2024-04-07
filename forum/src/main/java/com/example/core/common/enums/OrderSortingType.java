@@ -1,6 +1,6 @@
 package com.example.core.common.enums;
 
-import com.example.core.common.exception.BusinessException;
+import com.example.core.common.BusinessException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
