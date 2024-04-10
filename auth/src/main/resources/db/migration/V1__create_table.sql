@@ -28,9 +28,17 @@ CREATE TABLE IF NOT EXISTS confirmation_token
     FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
+CREATE TABLE IF NOT EXISTS assignment
+(
+    category_id UUID,
+    user_id     UUID,
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
+    PRIMARY KEY (category_id, user_id)
+);
 
 INSERT INTO users (user_id, username, email, password, full_name, phone_number)
-VALUES ('f7b3b3b3-3b3b-3b3b-3b3b-3b3b3b3b3b3b', 'admin', 'admin@gmail.com', '$2a$10$Ey6NQfYN2N84WCNjeqV51ui/Y98Vy4QH9wPqlXUpexib9xRBP5Y46',
+VALUES ('f7b3b3b3-3b3b-3b3b-3b3b-3b3b3b3b3b3b', 'admin', 'admin@gmail.com',
+        '$2a$10$Ey6NQfYN2N84WCNjeqV51ui/Y98Vy4QH9wPqlXUpexib9xRBP5Y46',
         'Admin Admin', '+79677761281');
 
 INSERT INTO role (user_id, role)

@@ -49,6 +49,9 @@ redis-client = { module = "redis.clients:jedis", version = "5.1.2" }
 webmvc = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version = "2.3.0" }
 openapi = { module = "org.springdoc:springdoc-openapi-ui", version = "1.7.0" }
 
+# OpenFeign
+open-feign = { module = "org.springframework.cloud:spring-cloud-starter-openfeign", version = "4.1.0" }
+
 # AWS S3
 aws-s3 = { module = "org.springframework.cloud:spring-cloud-starter-aws", version = "2.2.6.RELEASE" }
 

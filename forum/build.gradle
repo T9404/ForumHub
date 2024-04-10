@@ -14,10 +14,14 @@ dependencies {
 
     implementation libs.mapstruct
     annotationProcessor libs.mapstruct.processor
+    implementation libs.open.feign
 
     implementation libs.jpa
     implementation libs.flyway
     runtimeOnly libs.postgresql
+
+    implementation libs.spring.security
+    implementation project(':common')
 
     testImplementation libs.jupiter
     testImplementation libs.starter.test

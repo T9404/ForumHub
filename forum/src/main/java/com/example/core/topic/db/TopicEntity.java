@@ -14,6 +14,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "topic")
+@NamedEntityGraph(
+        name = "TopicEntity.categoryWithCreator",
+        attributeNodes = @NamedAttributeNode(value = "category", subgraph = "categoryWithCreator"),
+        subgraphs = @NamedSubgraph(
+                name = "categoryWithCreator",
+                attributeNodes = @NamedAttributeNode("creatorId")
+        )
+)
 public class TopicEntity {
 
     @Id
@@ -36,4 +44,7 @@ public class TopicEntity {
 
     @Column(name = "creator_id")
     private UUID creatorId;
+
+    @Column(name = "status")
+    private String status;
 }

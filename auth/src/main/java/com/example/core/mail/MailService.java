@@ -1,5 +1,6 @@
 package com.example.core.mail;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,7 +13,7 @@ public class MailService {
     private final JavaMailSender mailSender;
 
     @Async
-    public void sendMail(String to, String subject, String text) {
+    public void sendMail(@NotNull String to, @NotNull String subject, @NotNull String text) {
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(to);
         email.setSubject(subject);

@@ -7,10 +7,10 @@ import lombok.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-@Builder
 @Getter
 @Setter
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "confirmation_token")

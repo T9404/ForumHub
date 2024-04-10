@@ -1,5 +1,7 @@
 package com.example.security.jwt;
 
+import com.example.exception.BusinessException;
+import com.example.exception.event.JwtTokenEvent;
 import com.example.security.dto.role.Role;
 import com.example.security.dto.role.RoleId;
 import com.example.security.jwt.property.JwtTokenProperty;
@@ -39,14 +41,12 @@ public class JwtProvider {
 
     public Set<Role> extractRoleFromAccessToken(@NonNull String accessToken) {
         try {
-            var claims = getAccessClaims(accessToken);
-            System.out.println(claims.get(ROLE));
-            Set<Role> roles = new HashSet<>();
-            var role = new Role(new RoleId(UUID.fromString(claims.getSubject()), "ADMIN"));
-            roles.add(role);
-            return roles;
+            Claims claims = getAccessClaims(accessToken);
+            LinkedHashMap<String, Object> values = getRoleClaim(claims);
+            Role roleEntity = buildRoleEntity(values);
+            return Collections.singleton(roleEntity);
         } catch (Exception e) {
-            throw new RuntimeException("Cast exception, invalid token");
+            throw new BusinessException(JwtTokenEvent.INVALID_TOKEN, "Invalid token");
         }
     }
 
@@ -64,20 +64,42 @@ public class JwtProvider {
                 .getPayload();
     }
 
-    private void validateToken(@NonNull String token, @NonNull SecretKey secret) {
+    public static void validateToken(@NonNull String token, @NonNull SecretKey secret) {
         try {
             Jwts.parser()
                     .verifyWith(secret)
                     .build()
                     .parse(token);
         } catch (ExpiredJwtException expEx) {
-            throw new RuntimeException("Token expired");
+            throw new BusinessException(JwtTokenEvent.EXPIRED_TOKEN, "Token expired");
         } catch (UnsupportedJwtException unsEx) {
-            throw new RuntimeException("Unsupported token");
+            throw new BusinessException(JwtTokenEvent.UNSUPPORTED_TOKEN, "Unsupported token");
         } catch (MalformedJwtException mjEx) {
-            throw new RuntimeException("Malformed token");
+            throw new BusinessException(JwtTokenEvent.MALFORMED_TOKEN, "Malformed token");
         } catch (Exception e) {
-            throw new RuntimeException("Invalid token");
+            throw new BusinessException(JwtTokenEvent.INVALID_TOKEN, "Invalid token");
         }
+    }
+
+    private LinkedHashMap<String, Object> getRoleClaim(Claims claims) {
+        Object roleClaimObj = claims.get(ROLE);
+        if (roleClaimObj instanceof List<?> roleClaim && (!roleClaim.isEmpty()
+                && roleClaim.getFirst() instanceof LinkedHashMap<?, ?> firstRoleClaim)) {
+            Object idObj = firstRoleClaim.get("id");
+            if (idObj instanceof LinkedHashMap) {
+                @SuppressWarnings("unchecked")
+                LinkedHashMap<String, Object> idMap = (LinkedHashMap<String, Object>) idObj;
+                return idMap;
+            }
+        }
+        throw new IllegalArgumentException("Invalid role claim format");
+    }
+
+    private Role buildRoleEntity(LinkedHashMap<String, Object> values) {
+        var role = (String) values.get("role");
+        var userId = (String) values.get("userId");
+        return new Role(
+                new RoleId(UUID.fromString(userId), role)
+        );
     }
 }

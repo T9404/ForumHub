@@ -53,31 +53,53 @@ public class FilterMessageRepositoryImpl implements FilterMessageRepository {
     private List<Predicate> buildPredicates(MessageFilter filter, CriteriaBuilder builder, Root<MessageEntity> message) {
         List<Predicate> predicates = new ArrayList<>();
 
-        if (filter.content() != null && !filter.content().isBlank()) {
-            predicates.add(builder.like(builder.upper(message.get("content")), "%" + filter.content().toUpperCase() + "%"));
-            predicates.add(builder.like(builder.lower(message.get("content")), "%" + filter.content().toLowerCase() + "%"));
-        }
-
-        if (filter.start() != null) {
-            predicates.add(builder.greaterThanOrEqualTo(message.get("createdAt"), filter.start()));
-        }
-
-        if (filter.end() != null) {
-            predicates.add(builder.lessThanOrEqualTo(message.get("createdAt"), filter.end()));
-        }
-
-        if (filter.creatorId() != null) {
-            predicates.add(builder.equal(message.get("creatorId"), filter.creatorId()));
-        }
-
-        if (filter.topicId() != null) {
-            predicates.add(builder.equal(message.get("topic").get("topicId"), filter.topicId()));
-        }
-
-        if (filter.categoryId() != null) {
-            predicates.add(builder.equal(message.get("topic").get("category").get("categoryId"), filter.categoryId()));
-        }
+        addContentPredicate(filter, builder, message, predicates);
+        addStartPredicate(filter, builder, message, predicates);
+        addEndPredicate(filter, builder, message, predicates);
+        addCreatorIdPredicate(filter, builder, message, predicates);
+        addTopicIdPredicate(filter, builder, message, predicates);
+        addCategoryIdPredicate(filter, builder, message, predicates);
 
         return predicates;
     }
+
+    private void addContentPredicate(MessageFilter filter, CriteriaBuilder builder, Root<MessageEntity> message, List<Predicate> predicates) {
+        if (filter.content() != null && !filter.content().isBlank()) {
+            var content = filter.content();
+            var contentLikeUpper = builder.like(builder.upper(message.get("content")), "%" + content.toUpperCase() + "%");
+            var contentLikeLower = builder.like(builder.lower(message.get("content")), "%" + content.toLowerCase() + "%");
+            predicates.add(builder.or(contentLikeUpper, contentLikeLower));
+        }
+    }
+
+    private void addStartPredicate(MessageFilter filter, CriteriaBuilder builder, Root<MessageEntity> message, List<Predicate> predicates) {
+        if (filter.start() != null) {
+            predicates.add(builder.greaterThanOrEqualTo(message.get("createdAt"), filter.start()));
+        }
+    }
+
+    private void addEndPredicate(MessageFilter filter, CriteriaBuilder builder, Root<MessageEntity> message, List<Predicate> predicates) {
+        if (filter.end() != null) {
+            predicates.add(builder.lessThanOrEqualTo(message.get("createdAt"), filter.end()));
+        }
+    }
+
+    private void addCreatorIdPredicate(MessageFilter filter, CriteriaBuilder builder, Root<MessageEntity> message, List<Predicate> predicates) {
+        if (filter.creatorId() != null) {
+            predicates.add(builder.equal(message.get("creatorId"), filter.creatorId()));
+        }
+    }
+
+    private void addTopicIdPredicate(MessageFilter filter, CriteriaBuilder builder, Root<MessageEntity> message, List<Predicate> predicates) {
+        if (filter.topicId() != null) {
+            predicates.add(builder.equal(message.get("topic").get("topicId"), filter.topicId()));
+        }
+    }
+
+    private void addCategoryIdPredicate(MessageFilter filter, CriteriaBuilder builder, Root<MessageEntity> message, List<Predicate> predicates) {
+        if (filter.categoryId() != null) {
+            predicates.add(builder.equal(message.get("topic").get("category").get("categoryId"), filter.categoryId()));
+        }
+    }
+
 }

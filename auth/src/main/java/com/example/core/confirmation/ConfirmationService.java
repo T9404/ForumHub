@@ -21,14 +21,14 @@ public class ConfirmationService {
     private long tokenExpiration;
 
     public String createConfirmationToken(UserEntity user) {
-        ConfirmationTokenEntity confirmationToken = new ConfirmationTokenEntity(user);
-        confirmationToken = confirmationTokenRepository.save(confirmationToken);
-        return confirmationToken.getToken();
+        var token = new ConfirmationTokenEntity(user);
+        token = confirmationTokenRepository.save(token);
+        return token.getToken();
     }
 
-    public void confirmToken(ConfirmationTokenEntity confirmationToken) {
-        confirmationToken.setConfirmed(true);
-        confirmationTokenRepository.save(confirmationToken);
+    public void confirmToken(ConfirmationTokenEntity token) {
+        token.setConfirmed(true);
+        confirmationTokenRepository.save(token);
     }
 
     public ConfirmationTokenEntity getConfirmationToken(String token) {
@@ -41,8 +41,8 @@ public class ConfirmationService {
             throw new BusinessException(ConfirmationTokenEvent.TOKEN_ALREADY_CONFIRMED, "Token already confirmed");
         }
 
-        var maxPossibleExpiration = confirmationToken.getCreatedAt().plusSeconds(tokenExpiration);
-        if (maxPossibleExpiration.isBefore(OffsetDateTime.now())) {
+        var maxExpiration = confirmationToken.getCreatedAt().plusSeconds(tokenExpiration);
+        if (maxExpiration.isBefore(OffsetDateTime.now())) {
             throw new BusinessException(ConfirmationTokenEvent.TOKEN_EXPIRED, "Token expired");
         }
     }

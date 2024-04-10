@@ -1,6 +1,6 @@
 package com.example.core.category.enums;
 
-import com.example.core.common.EventInfo;
+import com.example.exception.EventInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.slf4j.event.Level;

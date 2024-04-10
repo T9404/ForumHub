@@ -1,6 +1,7 @@
 package com.example.public_interface.page;
 
 import lombok.Value;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -14,5 +15,13 @@ public class PageResponse<T> {
         int page;
         int size;
         long totalElements;
+
+        public static PageResponse.Metadata createMetadata(PageRequest pageRequest, long totalElements) {
+            return new PageResponse.Metadata(
+                    pageRequest.getPageNumber(),
+                    pageRequest.getPageSize(),
+                    totalElements
+            );
+        }
     }
 }

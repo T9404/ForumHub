@@ -1,10 +1,7 @@
 package com.example.core.jwt;
 
-import com.example.core.jwt.event.JwtTokenEvent;
 import com.example.core.jwt.dto.TokenGenerationData;
 import com.example.core.jwt.property.JwtTokenProperty;
-import com.example.core.user.repository.entity.UserEntity;
-import com.example.exception.BusinessException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -18,6 +15,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.UUID;
+
+import static com.example.security.jwt.JwtProvider.validateToken;
 
 @Getter
 @Service
@@ -62,10 +61,6 @@ public class JwtProvider {
         validateToken(refreshToken, jwtRefreshSecret);
     }
 
-    public Claims getAccessClaims(@NonNull String token) {
-        return getClaims(token, jwtAccessSecret);
-    }
-
     public Claims getRefreshClaims(@NonNull String token) {
         return getClaims(token, jwtRefreshSecret);
     }
@@ -74,39 +69,12 @@ public class JwtProvider {
         return jwtRefreshTtlSecond;
     }
 
-    public String extractUserIdFromAccessToken(@NonNull String accessToken) {
-        return getAccessClaims(accessToken).getSubject();
-    }
-
-    public boolean isAccessTokenValid(@NonNull String accessToken, UserEntity user) {
-        validateToken(accessToken, jwtAccessSecret);
-        var claims = getAccessClaims(accessToken);
-        return user.getUserId().toString().equals(claims.getSubject());
-    }
-
     private Claims getClaims(@NonNull String token, @NonNull SecretKey secret) {
         return Jwts.parser()
                 .verifyWith(secret)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-    }
-
-    private void validateToken(@NonNull String token, @NonNull SecretKey secret) {
-        try {
-            Jwts.parser()
-                    .verifyWith(secret)
-                    .build()
-                    .parse(token);
-        } catch (ExpiredJwtException expEx) {
-            throw new BusinessException(JwtTokenEvent.EXPIRED_TOKEN, "Token expired");
-        } catch (UnsupportedJwtException unsEx) {
-            throw new BusinessException(JwtTokenEvent.UNSUPPORTED_TOKEN, "Unsupported token");
-        } catch (MalformedJwtException mjEx) {
-            throw new BusinessException(JwtTokenEvent.MALFORMED_TOKEN, "Malformed token");
-        } catch (Exception e) {
-            throw new BusinessException(JwtTokenEvent.INVALID_TOKEN, "Invalid token");
-        }
     }
 
     private Date getDateWithPlus(long delta) {

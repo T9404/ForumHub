@@ -1,23 +1,22 @@
 package com.example.core.user;
 
-import com.example.core.user.event.UserEvent;
+import com.example.exception.event.UserEvent;
 import com.example.core.confirmation.repository.entity.ConfirmationTokenEntity;
-import com.example.core.user.role.enums.RoleType;
+import com.example.rest.admin.v1.request.CreateUserDto;
+import com.example.security.enums.RoleType;
 import com.example.core.user.role.RoleRepository;
 import com.example.core.user.repository.UserRepository;
 import com.example.core.user.repository.entity.UserEntity;
 import com.example.core.user.role.role.RoleEntity;
 import com.example.core.user.role.role.RoleId;
 import com.example.exception.BusinessException;
-import com.example.public_interface.admin.UpdateUserDto;
-import com.example.public_interface.user.CreateUserDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -32,25 +31,47 @@ public class UserService {
         return createUser(request, RoleType.UNVERIFIED);
     }
 
-    public UserEntity createUserByAdmin(CreateUserDto request, RoleType roleType) {
-        return createUser(request, roleType);
+    public UserEntity createUserByAdmin(CreateUserDto request) {
+        return createUser(request, request.roleType());
     }
 
     public boolean isUserVerified(UserEntity user) {
-        return user.getRoles().stream()
-                .noneMatch(role -> role.getId().getRole().equals(RoleType.UNVERIFIED.name()));
+        return !hasRole(user, RoleType.UNVERIFIED);
     }
 
-    public UserEntity update(String userId, UpdateUserDto dto) {
-        var user = getById(userId);
-        user.setUsername(dto.username());
-        user.setEmail(dto.email());
-        user.setFullName(dto.fullName());
-        user.setPhoneNumber(dto.phoneNumber());
-        user.setPassword(passwordEncoder.encode(dto.password()));
+    public List<UserEntity> getAll() {
+        return userRepository.findAll();
+    }
 
-        roleRepository.updateRole(user.getUserId(), dto.roleType().name());
+    public UserEntity update(String userId, CreateUserDto dto) {
+        var user = getById(userId);
+
+        if (StringUtils.isNotBlank(dto.username())) {
+            user.setUsername(dto.username());
+        }
+
+        if (StringUtils.isNotBlank(dto.email())) {
+            user.setEmail(dto.email());
+        }
+
+        if (StringUtils.isNotBlank(dto.fullName())) {
+            user.setFullName(dto.fullName());
+        }
+
+        if (StringUtils.isNotBlank(dto.phoneNumber())) {
+            user.setPhoneNumber(dto.phoneNumber());
+        }
+
+        if (StringUtils.isNotBlank(dto.password())) {
+            user.setPassword(passwordEncoder.encode(dto.password()));
+        }
+
+        updateRole(user, dto.roleType());
         return userRepository.save(user);
+    }
+
+    public void updateRole(UserEntity user, RoleType roleType) {
+        roleRepository.updateRole(user.getUserId(), roleType.name());
     }
 
     public Set<RoleEntity> getAllRoles(UUID userId) {
@@ -60,11 +81,14 @@ public class UserService {
     public void blockUser(String userId) {
         var user = getById(userId);
 
+        if (hasRole(user, RoleType.ADMIN)) {
+            throw new BusinessException(UserEvent.USER_NOT_BLOCKED, "Admin cannot be blocked");
+        }
         if (hasRole(user, RoleType.BLOCKED)) {
             throw new BusinessException(UserEvent.USER_ALREADY_BLOCKED, "User is already blocked");
         }
 
-        roleRepository.updateRole(user.getUserId(), RoleType.BLOCKED.name());
+        updateRole(user, RoleType.BLOCKED);
     }
 
     public void unblockUser(String userId) {
@@ -74,7 +98,7 @@ public class UserService {
             throw new BusinessException(UserEvent.USER_NOT_BLOCKED, "User is not blocked");
         }
 
-        roleRepository.updateRole(user.getUserId(), RoleType.USER.name());
+        updateRole(user, RoleType.USER);
     }
 
     public void addRole(UserEntity user, RoleType roleType) {
@@ -111,16 +135,12 @@ public class UserService {
 
     public UserEntity getById(String userId) {
         return userRepository.findById(UUID.fromString(userId))
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
-
-    public UserDetailsService userDetailsService() {
-        return this::getById;
+                .orElseThrow(() -> new BusinessException(UserEvent.USER_NOT_FOUND, "User not found"));
     }
 
     public UserEntity getByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new BusinessException(UserEvent.USER_NOT_FOUND, "User not found"));
     }
 
     private UserEntity createUser(CreateUserDto request, RoleType roleType) {

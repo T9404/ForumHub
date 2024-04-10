@@ -4,15 +4,15 @@ import com.example.core.category.db.CategoryRepository;
 import com.example.core.topic.db.TopicEntity;
 import com.example.core.topic.db.TopicRepository;
 import com.example.integration.config.ContainerTest;
-import com.example.public_interface.category.CategoryHierarchyDto;
-import com.example.public_interface.category.CategoryResponseDto;
-import com.example.public_interface.category.CreateCategoryResponseDto;
-import com.example.public_interface.category.GetCategoryByNameDto;
-import com.example.public_interface.error.ErrorResponseDto;
+import com.example.rest.category.response.CategoryHierarchyDto;
+import com.example.rest.category.response.CategoryResponseDto;
+import com.example.rest.category.response.CreateCategoryResponseDto;
+import com.example.rest.category.request.GetCategoryByNameRequest;
+import com.example.rest.error.response.ErrorResponseDto;
 import com.example.public_interface.page.PageResponse;
-import com.example.rest.controller.category.dto.CreateCategoryRequestDto;
-import com.example.rest.controller.category.dto.GetCategoryRequest;
-import com.example.rest.controller.category.dto.UpdateCategoryRequestDto;
+import com.example.rest.category.request.CreateCategoryRequestDto;
+import com.example.rest.category.request.GetCategoryRequest;
+import com.example.rest.category.request.UpdateCategoryRequestDto;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -526,7 +526,7 @@ public class CategoryTest {
                 .extract()
                 .as(CreateCategoryResponseDto.class);
 
-        var getRequestByName = GetCategoryByNameDto.builder()
+        var getRequestByName = GetCategoryByNameRequest.builder()
                 .name("CATEGORY")
                 .build();
 

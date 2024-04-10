@@ -8,17 +8,19 @@ import java.util.UUID;
 
 @Builder
 public record MessageFilter(
-    String content,
-    OffsetDateTime start,
-    OffsetDateTime end,
+        String content,
 
-    @JsonProperty("creator_id")
-    UUID creatorId,
+        OffsetDateTime start,
 
-    @JsonProperty("topic_id")
-    UUID topicId,
+        OffsetDateTime end,
 
-    @JsonProperty("category_id")
-    UUID categoryId
+        @JsonProperty("creator_id")
+        UUID creatorId,
+
+        @JsonProperty("topic_id")
+        UUID topicId,
+
+        @JsonProperty("category_id")
+        UUID categoryId
 ) {
 }

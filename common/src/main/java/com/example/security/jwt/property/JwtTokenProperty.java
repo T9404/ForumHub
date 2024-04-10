@@ -1,4 +1,5 @@
 package com.example.security.jwt.property;
+
 import com.example.security.dto.token.Token;
 import lombok.Getter;
 import lombok.Setter;

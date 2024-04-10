@@ -1,9 +1,7 @@
 package com.example.rest.auth.v1;
 
 import com.example.core.auth.AuthenticationService;
-import com.example.public_interface.auth.LoginDto;
-import com.example.public_interface.user.CreateUserDto;
-import com.example.rest.auth.v1.request.CreateUserRequest;
+import com.example.rest.admin.v1.request.CreateUserDto;
 import com.example.rest.auth.v1.request.LoginRequest;
 import com.example.rest.auth.v1.request.RefreshTokenRequest;
 import com.example.rest.auth.v1.request.ResendTokenRequest;
@@ -20,15 +18,8 @@ public class AuthController {
     private final AuthenticationService authService;
 
     @PostMapping("/register")
-    public RegistrationResponse signUp(@RequestBody @Valid CreateUserRequest request) {
-        var dto = new CreateUserDto(
-                request.username(),
-                request.password(),
-                request.email(),
-                request.fullName(),
-                request.phoneNumber()
-        );
-        return authService.signUp(dto);
+    public RegistrationResponse signUp(@RequestBody @Valid CreateUserDto request) {
+        return authService.signUp(request);
     }
 
     @GetMapping("/verification")
@@ -43,11 +34,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public JwtResponse signIn(@RequestBody @Valid LoginRequest request) {
-        var dto = new LoginDto(
-                request.email(),
-                request.password()
-        );
-        return authService.signIn(dto);
+        return authService.signIn(request);
     }
 
     @PostMapping("/refresh")

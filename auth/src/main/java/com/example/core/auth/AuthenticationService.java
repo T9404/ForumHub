@@ -3,14 +3,14 @@ package com.example.core.auth;
 import com.example.core.confirmation.ConfirmationService;
 import com.example.core.jwt.dto.TokenGenerationData;
 import com.example.core.auth.event.AuthEvent;
-import com.example.core.user.event.UserEvent;
+import com.example.exception.event.UserEvent;
 import com.example.core.mail.MailService;
 import com.example.core.mail.property.MailMessageProperty;
 import com.example.core.user.repository.entity.UserEntity;
 import com.example.core.user.UserService;
 import com.example.exception.BusinessException;
-import com.example.public_interface.auth.LoginDto;
-import com.example.public_interface.user.CreateUserDto;
+import com.example.rest.admin.v1.request.CreateUserDto;
+import com.example.rest.auth.v1.request.LoginRequest;
 import com.example.rest.auth.v1.request.RefreshTokenRequest;
 import com.example.rest.auth.v1.request.ResendTokenRequest;
 import com.example.rest.auth.v1.response.JwtResponse;
@@ -23,21 +23,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final MailService mailService;
-    private final UserService userService;
-    private final TokenService tokenService;
     private final MailMessageProperty mailMessageProperty;
     private final ConfirmationService confirmationService;
+    private final TokenService tokenService;
+    private final MailService mailService;
+    private final UserService userService;
 
     @Transactional
-    public RegistrationResponse signUp(@NonNull CreateUserDto request) {
-        checkIfUsernameExists(request.username());
-        checkIfEmailExists(request.email());
+    public RegistrationResponse signUp(@NonNull CreateUserDto dto) {
+        checkIfUsernameExists(dto.username());
+        checkIfEmailExists(dto.email());
 
-        var user = userService.create(request);
-
+        var user = userService.create(dto);
         sendConfirmationMail(user);
-
         return new RegistrationResponse("Verification email has been sent to " + user.getEmail());
     }
 
@@ -56,17 +54,11 @@ public class AuthenticationService {
         sendConfirmationMail(user);
     }
 
-    public JwtResponse signIn(@NonNull LoginDto request) {
-        UserEntity user = userService.getByEmail(request.email());
+    public JwtResponse signIn(@NonNull LoginRequest request) {
+        var user = userService.getByEmail(request.email());
 
-        if (!userService.checkPassword(request.password(), user.getPassword())) {
-            throw new BusinessException(AuthEvent.INVALID_CREDENTIALS, "Email or password is incorrect");
-        }
-
-        var isUserVerified = userService.isUserVerified(user);
-        if (!isUserVerified) {
-            throw new BusinessException(UserEvent.USER_NOT_VERIFIED, "User is not verified");
-        }
+        checkPassword(request, user);
+        checkIfUserVerified(user);
 
         var userData = new TokenGenerationData(user.getUserId(), user.getRoles());
         return tokenService.createTokens(userData);
@@ -111,5 +103,18 @@ public class AuthenticationService {
     private void sendConfirmationToken(String confirmationToken, String email) {
         String content = String.format(mailMessageProperty.getContent(), confirmationToken);
         mailService.sendMail(email, mailMessageProperty.getSubject(), content);
+    }
+
+    private void checkPassword(LoginRequest request, UserEntity user) {
+        if (!userService.checkPassword(request.password(), user.getPassword())) {
+            throw new BusinessException(AuthEvent.INVALID_CREDENTIALS, "Email or password is incorrect");
+        }
+    }
+
+    private void checkIfUserVerified(UserEntity user) {
+        var isUserVerified = userService.isUserVerified(user);
+        if (!isUserVerified) {
+            throw new BusinessException(UserEvent.USER_NOT_VERIFIED, "User is not verified");
+        }
     }
 }

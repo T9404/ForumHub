@@ -10,9 +10,9 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
-@Builder
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {

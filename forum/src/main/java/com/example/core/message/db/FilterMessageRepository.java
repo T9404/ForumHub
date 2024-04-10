@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface FilterMessageRepository {
     List<MessageEntity> findAll(MessageFilter filter, PageRequest pageRequest);
+
     int count(MessageFilter filter);
 }

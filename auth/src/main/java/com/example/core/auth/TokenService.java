@@ -1,6 +1,6 @@
 package com.example.core.auth;
 
-import com.example.core.jwt.event.JwtTokenEvent;
+import com.example.exception.event.JwtTokenEvent;
 import com.example.core.jwt.JwtProvider;
 import com.example.core.jwt.dto.TokenGenerationData;
 import com.example.core.jwt.refresh.entity.RefreshTokenEntity;

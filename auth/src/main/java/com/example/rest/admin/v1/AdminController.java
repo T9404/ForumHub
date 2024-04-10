@@ -1,12 +1,14 @@
 package com.example.rest.admin.v1;
 
+import com.example.contract.AssignmentsDto;
 import com.example.core.admin.AdminService;
-import com.example.public_interface.admin.UpdateUserDto;
-import com.example.rest.admin.v1.request.CreateUserByAdminRequest;
+import com.example.rest.admin.v1.request.CreateUserDto;
 import com.example.rest.admin.v1.response.UserDto;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -14,27 +16,25 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
     private final AdminService adminService;
 
-    @GetMapping("/users")
-    public UserDto getUser(@RequestParam(name = "user_id") String userId) {
+    @GetMapping("/users/{user_id}")
+    public UserDto getUser(@PathVariable(name = "user_id") String userId) {
         return adminService.getUser(userId);
     }
 
     @PostMapping("/users")
-    public UserDto createUser(@RequestBody @Valid CreateUserByAdminRequest request) {
+    public UserDto createUser(@RequestBody @Valid CreateUserDto request) {
         return adminService.createUser(request);
     }
 
-    @PutMapping("/users")
-    public UserDto updateUser(@RequestParam(name = "user_id") String userId, @RequestBody @Valid CreateUserByAdminRequest request) {
-        var dto = new UpdateUserDto(
-                request.username(),
-                request.email(),
-                request.password(),
-                request.fullName(),
-                request.phoneNumber(),
-                request.roleType()
-        );
-        return adminService.updateUser(userId, dto);
+    @GetMapping("/users")
+    public List<UserDto> getAllUsers() {
+        return adminService.getAllUsers();
+    }
+
+    @PatchMapping("/users")
+    public UserDto updateUser(@RequestParam(name = "user_id") String userId,
+                              @RequestBody @Valid CreateUserDto request) {
+        return adminService.updateUser(userId, request);
     }
 
     @PostMapping("/users/blocking")
@@ -45,6 +45,23 @@ public class AdminController {
     @DeleteMapping("/users/blocking")
     public void unblockUser(@RequestParam(name = "user_id") String userId) {
         adminService.unblockUser(userId);
+    }
+
+    @PostMapping("/assignments")
+    public void assignRole(@RequestParam(name = "user_id") String userId,
+                           @RequestParam(name = "category_id") String categoryId) {
+        adminService.assignCategory(userId, categoryId);
+    }
+
+    @DeleteMapping("/assignments")
+    public void unassignRole(@RequestParam(name = "user_id") String userId,
+                             @RequestParam(name = "category_id") String categoryId) {
+        adminService.unassignCategory(userId, categoryId);
+    }
+
+    @GetMapping("/assignments")
+    public AssignmentsDto isAssigned(@RequestParam(name = "user_id") String userId) {
+        return adminService.getAssignment(userId);
     }
 
 }
