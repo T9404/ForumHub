@@ -16,4 +16,8 @@ public interface RoleRepository extends JpaRepository<RoleEntity, RoleId> {
     void updateRole(@Param("user_id") UUID userId, String role);
 
     Set<RoleEntity> findAllByIdUserId(UUID userId);
+
+    @Modifying
+    @Query(value = "DELETE FROM role WHERE user_id = ?1 AND role = ?2", nativeQuery = true)
+    void deleteAllByIdUserIdAndIdRole(UUID userId, String role);
 }

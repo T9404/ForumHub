@@ -60,7 +60,7 @@ public class AdminController {
     }
 
     @GetMapping("/assignments")
-    public AssignmentsDto isAssigned(@RequestParam(name = "user_id") String userId) {
+    public AssignmentsDto getAssignment(@RequestParam(name = "user_id") String userId) {
         return adminService.getAssignment(userId);
     }
 

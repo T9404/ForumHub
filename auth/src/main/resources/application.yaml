@@ -35,7 +35,7 @@ logging:
     org.springframework.security: TRACE
 
 server:
-  port: ${AUTH_APP_PORT:8085}
+  port: ${APP_PORT:8085}
 
 jwt:
   token:

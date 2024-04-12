@@ -114,11 +114,7 @@ public class UserService {
     public void confirmEmail(ConfirmationTokenEntity confirmationToken) {
         var user = confirmationToken.getUser();
         addRole(user, RoleType.USER);
-
-        var unverifiedRole = RoleEntity.builder()
-                .id(new RoleId(user.getUserId(), RoleType.UNVERIFIED.name()))
-                .build();
-        roleRepository.delete(unverifiedRole);
+        roleRepository.deleteAllByIdUserIdAndIdRole(user.getUserId(), RoleType.UNVERIFIED.name());
     }
 
     public boolean checkPassword(String password, String encodedPassword) {

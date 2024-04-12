@@ -43,7 +43,7 @@ public class UserEntity implements UserDetails {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private Set<RoleEntity> roles = new HashSet<>();
+    private Set<RoleEntity> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

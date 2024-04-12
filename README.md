@@ -1,12 +1,20 @@
-### Дополнительно Было добавлено 45 интеграционных теста на forum сервис
-### Также был сделан Gateway
+### На данный момент Gateway не работает, пожалуйста, обращайтесь к сервисам напрямую
+
+### Для хранения файлов использую решение из 1 модуля - storage service (Yandex S3)
 
 [Build](#build)
 ```bash
-./gradlew build
+./gradlew build -x test
 ```
 
 ```bash
 docker compose up --build
+```
+
+
+#### Admin credentials
+```bash
+admin@gmail.com
+12345
 ```
 

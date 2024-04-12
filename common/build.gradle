@@ -1,10 +1,18 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
-    alias(libs.plugins.spring)
+    alias(libs.plugins.spring) apply false
     alias(libs.plugins.spring.dependency.management)
 }
 
 repositories {
     mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom(SpringBootPlugin.BOM_COORDINATES)
+    }
 }
 
 dependencies {
