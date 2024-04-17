@@ -1,0 +1,490 @@
+{
+	"info": {
+		"_postman_id": "cc51987e-72f8-44cf-88bd-e23713e6154b",
+		"name": "hits",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24208120"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"lmlmmm112\",\r\n    \"email\" : \"lmlmmmmmmm@yandex.ru\",\r\n    \"password\" : \"12345\",\r\n    \"full_name\" : \"Testov Andrey\",\r\n    \"phone_number\" : \"+79677762622\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"admin@gmail.com\",\r\n    \"password\" : \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refresh_token\" : \"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJleHAiOjMwMDkzMzUyOTksImp0aSI6ImU5M2I1ZGEyLTMxZjctNGU0Yy04YmMwLTg1ODViNjAyYTlkMCJ9.3Ul4aqhNZ9PL1u5L0N5h5ite12H4sF8BuaRHVj3tp_PctgUg8g4Fwvr1v3PelENN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1/auth/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resend-token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"lmlmmmmmmm@yandex.ru\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1/auth/resend-token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"resend-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refresh_token\" : \"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJleHAiOjMwMDkzMzU0OTAsImp0aSI6IjI4YWZmNWZhLWJmZGMtNDc4YS04ZjU5LWExN2UyYmQ2NzgyNiJ9.T-cKwAucTKSfh-pqY9yuRgOfLJeJReLRx9XK-7ApPDdGxcxuqJAUwL7riUiYR_mT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1/auth/refresh",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjpbeyJpZCI6eyJ1c2VySWQiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjoiQURNSU4ifX1dLCJleHAiOjE3MTQyMzU3ODgsImp0aSI6IjY5MjRiNTY1LWQ1OWUtNDk0OC1iMjFiLWUxYmM3MDI5ZTk0ZSJ9.OvkKN3_ErPWnoCjy4lzsH4oseiw07MB-y8MARE-NPWE9gjawj946pLKTJRUhTLFh",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"hey hoy1\",\r\n    \"email\" : \"ghubman11@gmail.com\",\r\n    \"password\" : \"12345\",\r\n    \"full_name\" : \"Joridy Jor\",\r\n    \"phone_number\" : \"+7912121\",\r\n    \"role\" : \"USER\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1/admin/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjpbeyJpZCI6eyJ1c2VySWQiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjoiQURNSU4ifX1dLCJleHAiOjE3MTQyMzU3ODgsImp0aSI6IjY5MjRiNTY1LWQ1OWUtNDk0OC1iMjFiLWUxYmM3MDI5ZTk0ZSJ9.OvkKN3_ErPWnoCjy4lzsH4oseiw07MB-y8MARE-NPWE9gjawj946pLKTJRUhTLFh",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8085/api/v1/admin/users/91508362-8925-4be0-905c-cb7f3d662e5f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"users",
+								"91508362-8925-4be0-905c-cb7f3d662e5f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjpbeyJpZCI6eyJ1c2VySWQiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjoiQURNSU4ifX1dLCJleHAiOjE3MTQyMzU3ODgsImp0aSI6IjY5MjRiNTY1LWQ1OWUtNDk0OC1iMjFiLWUxYmM3MDI5ZTk0ZSJ9.OvkKN3_ErPWnoCjy4lzsH4oseiw07MB-y8MARE-NPWE9gjawj946pLKTJRUhTLFh",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8085/api/v1/admin/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjpbeyJpZCI6eyJ1c2VySWQiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjoiQURNSU4ifX1dLCJleHAiOjE3MTQyMzU3ODgsImp0aSI6IjY5MjRiNTY1LWQ1OWUtNDk0OC1iMjFiLWUxYmM3MDI5ZTk0ZSJ9.OvkKN3_ErPWnoCjy4lzsH4oseiw07MB-y8MARE-NPWE9gjawj946pLKTJRUhTLFh",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"user_id\": \"91508362-8925-4be0-905c-cb7f3d662e5f\",\r\n        \"full_name\": \"Joridy Jor\",\r\n        \"phone_number\": \"+7912121\",\r\n        \"username\": \"hey hoy\",\r\n        \"password\" : \"123123\",\r\n        \"email\": \"ghubman1@gmail.com\",\r\n        \"role\" : \"MODERATOR\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1/admin/users?user_id=91508362-8925-4be0-905c-cb7f3d662e5f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"users"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "91508362-8925-4be0-905c-cb7f3d662e5f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "block",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjpbeyJpZCI6eyJ1c2VySWQiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjoiQURNSU4ifX1dLCJleHAiOjE3MTQyMzU3ODgsImp0aSI6IjY5MjRiNTY1LWQ1OWUtNDk0OC1iMjFiLWUxYmM3MDI5ZTk0ZSJ9.OvkKN3_ErPWnoCjy4lzsH4oseiw07MB-y8MARE-NPWE9gjawj946pLKTJRUhTLFh",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8085/api/v1/admin/users/blocking?user_id=91508362-8925-4be0-905c-cb7f3d662e5f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"users",
+								"blocking"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "91508362-8925-4be0-905c-cb7f3d662e5f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unblock",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjpbeyJpZCI6eyJ1c2VySWQiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjoiQURNSU4ifX1dLCJleHAiOjE3MTQyMzU3ODgsImp0aSI6IjY5MjRiNTY1LWQ1OWUtNDk0OC1iMjFiLWUxYmM3MDI5ZTk0ZSJ9.OvkKN3_ErPWnoCjy4lzsH4oseiw07MB-y8MARE-NPWE9gjawj946pLKTJRUhTLFh",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8085/api/v1/admin/users/blocking?user_id=91508362-8925-4be0-905c-cb7f3d662e5f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"users",
+								"blocking"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "91508362-8925-4be0-905c-cb7f3d662e5f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addAssignment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjpbeyJpZCI6eyJ1c2VySWQiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjoiQURNSU4ifX1dLCJleHAiOjE3MTQyMzU3ODgsImp0aSI6IjY5MjRiNTY1LWQ1OWUtNDk0OC1iMjFiLWUxYmM3MDI5ZTk0ZSJ9.OvkKN3_ErPWnoCjy4lzsH4oseiw07MB-y8MARE-NPWE9gjawj946pLKTJRUhTLFh",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8085/api/v1/admin/assignments?user_id=91508362-8925-4be0-905c-cb7f3d662e5f&category_id=81508362-8925-4be0-905c-cb7f3d662e5f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"assignments"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "91508362-8925-4be0-905c-cb7f3d662e5f"
+								},
+								{
+									"key": "category_id",
+									"value": "81508362-8925-4be0-905c-cb7f3d662e5f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAssignments",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjpbeyJpZCI6eyJ1c2VySWQiOiJmN2IzYjNiMy0zYjNiLTNiM2ItM2IzYi0zYjNiM2IzYjNiM2IiLCJyb2xlIjoiQURNSU4ifX1dLCJleHAiOjE3MTQyMzU3ODgsImp0aSI6IjY5MjRiNTY1LWQ1OWUtNDk0OC1iMjFiLWUxYmM3MDI5ZTk0ZSJ9.OvkKN3_ErPWnoCjy4lzsH4oseiw07MB-y8MARE-NPWE9gjawj946pLKTJRUhTLFh",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8085/api/v1/admin/assignments?user_id=91508362-8925-4be0-905c-cb7f3d662e5f&category_id=81508362-8925-4be0-905c-cb7f3d662e5f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"assignments"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "91508362-8925-4be0-905c-cb7f3d662e5f"
+								},
+								{
+									"key": "category_id",
+									"value": "81508362-8925-4be0-905c-cb7f3d662e5f"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
