@@ -1,4 +1,4 @@
-package com.example.core.mail.property;
+package com.example.core.auth.mail.property;
 
 import lombok.Getter;
 import lombok.Setter;

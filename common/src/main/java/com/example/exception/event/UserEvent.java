@@ -14,7 +14,8 @@ public enum UserEvent implements EventInfo {
     USER_NOT_VERIFIED(HttpStatus.BAD_REQUEST, Level.INFO),
     USER_ALREADY_BLOCKED(HttpStatus.BAD_REQUEST, Level.INFO),
     USER_NOT_BLOCKED(HttpStatus.BAD_REQUEST, Level.INFO),
-    PERMISSION_DENIED(HttpStatus.BAD_REQUEST, Level.INFO);
+    PERMISSION_DENIED(HttpStatus.BAD_REQUEST, Level.INFO),
+    USER_ALREADY_VERIFIED(HttpStatus.BAD_REQUEST, Level.INFO);
 
     private final HttpStatus status;
     private final Level level;

@@ -1,0 +1,30 @@
+plugins {
+    alias(libs.plugins.spring)
+    alias(libs.plugins.spring.dependency.management)
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation libs.spring.web
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+    implementation libs.kafka
+    implementation libs.mail
+    implementation libs.spring.validation
+    implementation libs.open.feign
+
+    implementation libs.jpa
+    implementation libs.flyway
+    runtimeOnly libs.postgresql
+
+    implementation libs.spring.security
+    implementation project(':common')
+
+}
+
+test {
+    useJUnitPlatform()
+}

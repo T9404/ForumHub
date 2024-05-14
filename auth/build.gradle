@@ -15,6 +15,7 @@ dependencies {
     implementation libs.jpa
     implementation libs.flyway
     runtimeOnly libs.postgresql
+    implementation libs.kafka
 
     implementation libs.spring.validation
     implementation libs.spring.security

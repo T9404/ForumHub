@@ -22,6 +22,7 @@ import com.example.common.PageResponse;
 import com.example.message.controller.request.CreateMessageRequestDto;
 import com.example.message.controller.request.UpdateMessageRequestDto;
 import com.example.security.dto.user.User;
+import com.example.wishlist.WishlistNotificationService;
 import io.micrometer.common.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,7 @@ public class MessageService {
     private final AssignmentService assignmentService;
     private final MessageRepository messageRepository;
     private final AttachmentService attachmentService;
+    private final WishlistNotificationService wishlistNotificationService;
     private final TopicService topicService;
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -60,6 +62,8 @@ public class MessageService {
         if (attachments != null) {
             attachmentService.saveAttachments(savedMessage, attachments);
         }
+
+        wishlistNotificationService.notifyAllSubscribers(savedMessage);
 
         return new CreateMessageResponseDto(savedMessage.getMessageId());
     }

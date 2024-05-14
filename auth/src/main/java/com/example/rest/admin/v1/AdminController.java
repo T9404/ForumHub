@@ -1,9 +1,9 @@
 package com.example.rest.admin.v1;
 
-import com.example.contract.AssignmentsDto;
+import com.example.contract.auth.AssignmentsDto;
 import com.example.core.admin.AdminService;
 import com.example.rest.admin.v1.request.CreateUserDto;
-import com.example.rest.admin.v1.response.UserDto;
+import com.example.contract.auth.UserDto;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +16,8 @@ import java.util.List;
 public class AdminController {
     private final AdminService adminService;
 
-    @GetMapping("/users/{user_id}")
-    public UserDto getUser(@PathVariable(name = "user_id") String userId) {
+    @GetMapping("/users")
+    public UserDto getUser(@RequestParam(name = "user_id") String userId) {
         return adminService.getUser(userId);
     }
 
@@ -26,7 +26,7 @@ public class AdminController {
         return adminService.createUser(request);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/users/all")
     public List<UserDto> getAllUsers() {
         return adminService.getAllUsers();
     }

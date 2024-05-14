@@ -1,4 +1,4 @@
-package com.example.rest.admin.v1.response;
+package com.example.contract.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -5,3 +5,5 @@ include 'gateway'
 include 'forum'
 include 'auth'
 include 'common'
+include 'notification'
+

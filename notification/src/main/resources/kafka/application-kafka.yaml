@@ -1,0 +1,16 @@
+consumer:
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
+    group-id: my-group-id
+
+logging:
+  level:
+    org:
+      apache:
+        kafka: error
+        orm:
+          jpa:
+            JpaTransactionManager: trace
+          transaction: trace
+          listener:
+            KafkaMessageListenerContainer: error

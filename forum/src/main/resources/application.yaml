@@ -31,6 +31,12 @@ spring:
       enabled: true
       max-file-size: 4GB
       max-request-size: 4GB
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    listener:
+      ack-mode: MANUAL_IMMEDIATE
 
 jwt:
   token:
@@ -43,3 +49,14 @@ jwt:
 
 server:
   port: ${FORUM_APP_PORT:8084}
+
+exporter:
+  wishlist:
+    source-topic: "v1.notification"
+
+outbox:
+  message:
+    pendingTimeoutInSeconds: 10
+    retryMaxAttempts: 3
+    kafkaTransformTimeout: 60000
+    kafkaSendTimeout: 180000

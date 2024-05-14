@@ -1,0 +1,12 @@
+jwt:
+  token:
+    access:
+      expiration: 900000 # (15 minutes)
+      secret: 13A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+    refresh:
+      expiration: 1296000000 # (15 days)
+      secret: 33A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327851
+
+logging:
+  level:
+    org.springframework.security: TRACE

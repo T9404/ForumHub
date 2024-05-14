@@ -1,12 +1,12 @@
 package com.example.core.admin;
 
-import com.example.contract.AssignmentsDto;
+import com.example.contract.auth.AssignmentsDto;
 import com.example.core.assignment.AssignmentService;
 import com.example.core.user.UserService;
 import com.example.core.user.repository.entity.UserEntity;
 import com.example.security.enums.RoleType;
 import com.example.rest.admin.v1.request.CreateUserDto;
-import com.example.rest.admin.v1.response.UserDto;
+import com.example.contract.auth.UserDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

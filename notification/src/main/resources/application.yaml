@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: notification
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:notification}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:123}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:notification}
+    user: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:123}
+    baselineOnMigrate: true
+    baselineVersion: 0
+  config:
+    activate:
+      on-profile: default
+    import:
+      - classpath:kafka/notification-exporter.yaml
+      - classpath:kafka/application-kafka.yaml
+      - classpath:security/application-security.yaml
+      - classpath:mail/application-mail.yaml
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            required: true
+  cloud:
+    openfeign:
+      client:
+        config:
+          authClient:
+            url: ${AUTH_SERVICE_URL:http://localhost:8085}
+
+server:
+  port: ${NOTIFICATION_APP_PORT:8086}

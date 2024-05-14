@@ -15,6 +15,7 @@ spring-dependency-management = { id = "io.spring.dependency-management", version
 spring-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 utils = { module = 'org.apache.commons:commons-lang3', version = "3.14.0" }
+kafka = { module = "org.springframework.kafka:spring-kafka", version = "3.1.4" }
 
 #Mail
 mail = { module = "org.springframework.boot:spring-boot-starter-mail", version.ref = "mail" }

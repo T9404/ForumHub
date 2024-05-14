@@ -1,5 +1,6 @@
 package com.example.core.user;
 
+import com.example.core.user.outbox.OutboxUserRoleService;
 import com.example.exception.event.UserEvent;
 import com.example.core.confirmation.repository.entity.ConfirmationTokenEntity;
 import com.example.rest.admin.v1.request.CreateUserDto;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +28,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final TransactionTemplate transactionTemplate;
+    private final OutboxUserRoleService outboxUserRoleService;
 
     public UserEntity create(CreateUserDto request) {
         return createUser(request, RoleType.UNVERIFIED);
@@ -71,7 +75,11 @@ public class UserService {
     }
 
     public void updateRole(UserEntity user, RoleType roleType) {
-        roleRepository.updateRole(user.getUserId(), roleType.name());
+        transactionTemplate.execute(status -> {
+            roleRepository.updateRole(user.getUserId(), roleType.name());
+            outboxUserRoleService.save(user);
+            return null;
+        });
     }
 
     public Set<RoleEntity> getAllRoles(UUID userId) {

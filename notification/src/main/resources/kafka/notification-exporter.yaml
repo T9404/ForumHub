@@ -1,0 +1,4 @@
+exporter:
+  notification:
+    source-topic: "v1.notification"
+    error-topic: "v1.notification.error"

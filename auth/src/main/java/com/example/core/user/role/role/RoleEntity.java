@@ -16,4 +16,9 @@ public class RoleEntity {
 
     @EmbeddedId
     private RoleId id;
+
+    @Override
+    public String toString() {
+        return id.getRole();
+    }
 }

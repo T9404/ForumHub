@@ -1,4 +1,4 @@
-package com.example.contract;
+package com.example.contract.auth;
 
 import java.util.Set;
 import java.util.UUID;
