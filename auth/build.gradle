@@ -26,8 +26,6 @@ dependencies {
     implementation libs.redis.client
     implementation libs.utils
 
-    implementation libs.mail
-
     implementation project(':common')
     testImplementation libs.jupiter
     testImplementation libs.starter.test

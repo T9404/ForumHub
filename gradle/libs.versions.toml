@@ -18,7 +18,7 @@ utils = { module = 'org.apache.commons:commons-lang3', version = "3.14.0" }
 kafka = { module = "org.springframework.kafka:spring-kafka", version = "3.1.4" }
 
 #Mail
-mail = { module = "org.springframework.boot:spring-boot-starter-mail", version.ref = "mail" }
+mail = { module = "org.springframework.boot:spring-boot-starter-mail" }
 
 #Mapper
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }

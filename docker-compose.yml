@@ -6,7 +6,7 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      - POSTGRES_MULTIPLE_DATABASES=${STORAGE_DB},${FORUM_DB},${AUTH_DB}
+      - POSTGRES_MULTIPLE_DATABASES=${STORAGE_DB},${FORUM_DB},${AUTH_DB},${NOTIFICATION_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     expose:
@@ -37,19 +37,19 @@ services:
 
   broker:
     image: confluentinc/cp-kafka:latest
-    hostname: broker
-    container_name: broker
+    hostname: ${KAFKA_HOST}
+    container_name: ${KAFKA_HOST}
     depends_on:
       - zookeeper
     ports:
       - '29092:29092'
-      - '9092:9092'
+      - '${KAFKA_PORT}:${KAFKA_PORT}'
       - '9101:9101'
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://${KAFKA_HOST}:${KAFKA_PORT}
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
@@ -124,8 +124,9 @@ services:
       context: gateway
       dockerfile: ./Dockerfile
     depends_on:
-      - storage
-      - forum
+      - ${STORAGE_APP_NAME}
+      - ${FORUM_APP_NAME}
+      - ${NOTIFICATION_APP_NAME}
     ports:
       - '${GATEWAY_APP_PORT}:${GATEWAY_APP_PORT}'
     environment:
@@ -147,6 +148,7 @@ services:
       dockerfile: ./Dockerfile
     depends_on:
       - ${POSTGRES_CONTAINER_NAME}
+      - ${KAFKA_HOST}
     ports:
       - '${FORUM_APP_PORT}:${FORUM_APP_PORT}'
     environment:
@@ -158,6 +160,31 @@ services:
       - STORAGE_SERVICE_URL=${STORAGE_SERVICE_URL}
       - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
       - APP_PORT=${FORUM_APP_PORT}
+      - KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}
+    networks:
+      - default
+
+  notification:
+    image: ${NOTIFICATION_APP_NAME}
+    container_name: ${NOTIFICATION_APP_NAME}
+    build:
+      context: notification
+      dockerfile: ./Dockerfile
+    depends_on:
+      - ${POSTGRES_CONTAINER_NAME}
+      - ${KAFKA_HOST}
+    ports:
+      - '${NOTIFICATION_APP_PORT}:${NOTIFICATION_APP_PORT}'
+    environment:
+      - POSTGRES_HOST=${POSTGRES_CONTAINER_NAME}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${NOTIFICATION_DB}
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+      - APP_PORT=${NOTIFICATION_APP_PORT}
+      - KAFKA_HOST=${KAFKA_HOST}
+      - KAFKA_PORT=${KAFKA_PORT}
     networks:
       - default
 
@@ -169,6 +196,7 @@ services:
       dockerfile: ./Dockerfile
     depends_on:
       - ${POSTGRES_CONTAINER_NAME}
+      - ${KAFKA_HOST}
     ports:
       - '${AUTH_APP_PORT}:${AUTH_APP_PORT}'
     environment:
@@ -180,6 +208,9 @@ services:
       - REDIS_HOST=${REDIS_CONTAINER_NAME}
       - REDIS_PORT=${REDIS_PORT}
       - APP_PORT=${AUTH_APP_PORT}
+      - KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}
+    networks:
+      - default
 
 networks:
   default:

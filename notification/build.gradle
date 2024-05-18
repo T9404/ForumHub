@@ -12,7 +12,10 @@ dependencies {
     compileOnly libs.lombok
     annotationProcessor libs.lombok
     implementation libs.kafka
-    implementation libs.mail
+    implementation("org.springframework.boot:spring-boot-starter-mail") {
+        exclude group:"org.eclipse.angus", module: "jakarta.mail"
+        implementation "com.sun.mail:jakarta.mail:2.0.1"
+    }
     implementation libs.spring.validation
     implementation libs.open.feign
 
