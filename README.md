@@ -1,4 +1,4 @@
-[Build](#build)
+#### Build
 ```bash
 ./gradlew build -x test
 ```
