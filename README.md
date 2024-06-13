@@ -1,6 +1,6 @@
 #### Build
 ```bash
-./gradlew build -x test
+./gradlew build
 ```
 
 ```bash
