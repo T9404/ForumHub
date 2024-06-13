@@ -27,8 +27,8 @@ spring:
 cloud:
   aws:
     credentials:
-      id-key: YCAJEhWNt9PogRNCBtr-aJjU_
-      secret-key: YCN6swfzOAth6Vrru9f1IiRcz9n27Guk8ydJlHt0
+      id-key: write-your-id
+      secret-key: write-your-key
     region:
       static: ru-central1
     endpoint: storage.yandexcloud.net
